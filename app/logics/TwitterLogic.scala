@@ -23,10 +23,10 @@ object TwitterLogic extends FutureUtils {
         // The latest tweet must be head
         val latestDateOp = tweetList.headOption.map(_.createdAt)
         // If latestDateOp is None, the judge is true
-        latestDateOp.fold(false)(date =>
+        latestDateOp.fold(false){ date =>
           // The latest is newer than (Now - period) ?
           date.getTime > System.currentTimeMillis - periodDay.toLong * 86400000L
-        )
+        }
       }
     }
 

@@ -31,7 +31,9 @@ sealed trait TwitterApiRepositoryComponent {
      * Check whether error exists or not on the response JSON
      */
     private[this] def errorCheck(json: JsValue): Future[JsValue] = {
-      (json \ "error").asOpt[TwitterError].fold(Future.successful(json))(e => Future.failed(e.toException))
+      (json \ "errors").asOpt[List[TwitterError]].fold(Future.successful(json))(eList =>
+        Future.failed(eList.head.toException)
+      )
     }
 
     /**
@@ -77,9 +79,9 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
     twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "screen_name" -> screenName)
 }
 
-trait TwitterApi extends TwitterApiRepositoryComponent with TwitterApiService {
-  protected[this] val consumerKey: ConsumerKey
+abstract class TwitterApi(ck: ConsumerKey) extends TwitterApiRepositoryComponent with TwitterApiService {
+  protected[this] val consumerKey = ck
   val twitterApiRepository = new TwitterApiRepository {
-    val ck = consumerKey
+    override protected[this] val ck = consumerKey
   }
 }

@@ -5,7 +5,7 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
-import java.util.Date
+import java.util.{Date, Locale}
 
 object TwitterReads {
   /**
@@ -19,11 +19,11 @@ object TwitterReads {
     )
     def reads(json: JsValue): JsResult[Date] = json match {
       case JsString(str) => {
-        val format = new SimpleDateFormat("dd HH:mm:ss Z yyyy")
+        val format = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH)
         // Throw exception if not a format of date
         format.setLenient(false)
         try {
-          JsSuccess(format.parse(str, new ParsePosition(8)))
+          JsSuccess(format.parse(str, new ParsePosition(0)))
         } catch {
           case e: java.text.ParseException => error
         }

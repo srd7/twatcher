@@ -1,6 +1,7 @@
 package twatcher
 
 import twatcher.models.Json._
+import twatcher.twitter.Twitter
 
 import play.api.{Application, Configuration, Play}
 import play.api.libs.json.Json
@@ -19,10 +20,14 @@ object globals extends Config {
    * Period to detect death
    */
   val periodDay = jsonConfig.periodDay
+
+  /**
+   * Static Twitter App
+   */
+  val twitter = new Twitter(jsonConfig.consumerKey.key, jsonConfig.consumerKey.secret)
 }
 
 sealed trait Config {
-
   /**
    * Try to read config json file(default: config.json)
    */
@@ -35,8 +40,10 @@ sealed trait Config {
     }
   }
 
-  private[this] def getString(path: String) = getPlayConfig(_.getString (path)).get
+  private[this] def getString(path: String) = getPlayConfig(_.getString (path))
 
   private[this] def getPlayConfig[T](f: Configuration => Option[T]) =
-    Play.maybeApplication.flatMap(p => f(p.configuration))
+    Play.maybeApplication.flatMap(p => f(p.configuration)).getOrElse {
+      throw new RuntimeException("config key not found")
+    }
 }

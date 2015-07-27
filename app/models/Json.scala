@@ -24,16 +24,34 @@ object Json {
     (__ \ "secret"     ).write[String]
   )(unlift(RequestToken.unapply))
 
+  /**
+   * Reads for twatcher.modles.ConsumerKey
+   */
+  implicit final val consumerKeyReads: Reads[ConsumerKey] = (
+    (__ \ "key"   ).read[String] and
+    (__ \ "secret").read[String]
+  )(ConsumerKey.apply _)
+
+  /**
+   * Writes for twatcher.models.ConsumerKey
+   */
+  implicit final val consumerKeyWrites: Writes[ConsumerKey] = (
+    (__ \ "key"   ).write[String] and
+    (__ \ "secret").write[String]
+  )(unlift(ConsumerKey.unapply))
+
   case class JsonConfigItem(
-    tokenList: List[RequestToken]
-  , periodDay: Int
+    tokenList  : List[RequestToken]
+  , consumerKey: ConsumerKey
+  , periodDay  : Int
   )
 
   /**
    * Reads for conf/config.json
    */
   implicit final val jsonConfigReads: Reads[JsonConfigItem] = (
-    (__ \ "token").read[List[RequestToken]] and
+    (__ \ "token" ).read[List[RequestToken]] and
+    (__ \ "app"   ).read[ConsumerKey] and
     (__ \ "period").read[Int]
   )(JsonConfigItem.apply _)
 }

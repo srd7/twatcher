@@ -9,3 +9,8 @@ case class RequestToken(
 ) {
   def toOAuthToken = OAuthToken(token, secret)
 }
+
+case class ConsumerKey(
+  key   : String
+, secret: String
+)

@@ -3,7 +3,6 @@ package twatcher.twitter
 import twatcher.twitter.TwitterUris._
 import twatcher.twitter.TwitterReads._
 
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Reads}
 import play.api.libs.oauth.{ConsumerKey, OAuthCalculator, RequestToken}
 import play.api.libs.ws.{WS, WSRequest}
@@ -38,53 +37,49 @@ sealed trait TwitterApiRepositoryComponent {
     /**
      * Send GET request to Twitter
      */
-    def get[T : Reads](url: String, token: RequestToken, param: (String, String)*): Future[T] = {
-      val request = buildRequest(url, token, param: _*)
-      for {
-        response  <- request.get()
-        validated <- errorCheck(response.json)
-      } yield (validated.as[T])
-    }
+    def get[T : Reads](url: String, token: RequestToken, param: (String, String)*)
+      (implicit ec: ExecutionContext): Future[T] = {
+        val request = buildRequest(url, token, param: _*)
+        for {
+          response  <- request.get()
+          validated <- errorCheck(response.json)
+        } yield (validated.as[T])
+      }
 
     /**
      * Send POST request to Twitter
      */
-    def post[T : Reads](url: String, token: RequestToken, param: (String, String)*): Future[T] = {
-      val request = buildRequest(url, token, param: _*)
-      for {
-        response  <- request.post("") // have to POST nothing
-        validated <- errorCheck(response.json)
-      } yield (validated.as[T])
-    }
+    def post[T : Reads](url: String, token: RequestToken, param: (String, String)*)
+      (implicit ec: ExecutionContext): Future[T] = {
+        val request = buildRequest(url, token, param: _*)
+        for {
+          response  <- request.post("") // have to POST nothing
+          validated <- errorCheck(response.json)
+        } yield (validated.as[T])
+      }
   }
 }
 
-sealed trait TwitterApiServiceComponent { self: TwitterApiRepositoryComponent =>
-  val twitterApiService: TwitterApiService
-  class TwitterApiService {
+sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
+  /**
+   * POST Twitter to Twitter
+   */
+  def tweet(status: String, token: RequestToken)(implicit ec: ExecutionContext): Future[Tweet] =
+    twitterApiRepository.post[Tweet](STATUSES_UPDATE, token, "status" -> status)
 
-    /**
-     * POST Twitter to Twitter
-     */
-    def tweet(status: String, token: RequestToken): Future[Tweet] =
-      twitterApiRepository.post[Tweet](STATUSES_UPDATE, token, "status" -> status)
+  /**
+   * GET user timeline
+   */
+  def getTimeline(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Tweet]] =
+    twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "user_id" -> userId.toString)
 
-    /**
-     * GET user timeline
-     */
-    def getTimeline(userId: Long, token: RequestToken): Future[List[Tweet]] =
-      twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "user_id" -> userId.toString)
-
-    def getTimeline(screenName: String, token: RequestToken): Future[List[Tweet]] =
-      twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "screen_name" -> screenName)
-  }
+  def getTimeline(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Tweet]] =
+    twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "screen_name" -> screenName)
 }
 
-trait TwitterApi extends TwitterApiRepositoryComponent with TwitterApiServiceComponent {
+trait TwitterApi extends TwitterApiRepositoryComponent with TwitterApiService {
   protected[this] val consumerKey: ConsumerKey
   val twitterApiRepository = new TwitterApiRepository {
     val ck = consumerKey
   }
-
-  val twitterApiService    = new TwitterApiService
 }

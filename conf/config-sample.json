@@ -1,0 +1,15 @@
+{
+  "token": [
+    {
+      "screen_name": "input your twitter screen name here(as srd7)",
+      "token": "input your account token here",
+      "secret": "input your account token secret here"
+    }
+  ],
+  "app": {
+    "key": "input your app consumer key here",
+    "secret": "input your app consumer key secret here"
+  },
+  "period": 7,
+  "scripts": ["script"]
+}

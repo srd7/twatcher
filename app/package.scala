@@ -8,35 +8,39 @@ import scala.sys.process._
 
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
-    val runningFut = TwitterLogic.isActiveAll(twitter, tokenList).map { isActive =>
-      if (isActive) {
-        // Do not have to run script
-        println("You are alive!")
-      } else {
-        // Run script
-        println("You are dead!")
-        if(isWindows) {
-          scriptList.foreach { scriptName =>
-            s"cmd /c $scriptName".!
-          }
+    // If the mode is Prod i.e. disted binary
+    //   check wheather dead or alive and run script.
+    if(app.mode == Mode.Prod) {
+      val runningFut = TwitterLogic.isActiveAll(twitter, tokenList).map { isActive =>
+        if (isActive) {
+          // Do not have to run script
+          println("You are alive!")
         } else {
-          scriptList.foreach { scriptName =>
-            s"./${scriptName}".!
+          // Run script
+          println("You are dead!")
+          if(isWindows) {
+            scriptList.foreach { scriptName =>
+              s"cmd /c $scriptName".!
+            }
+          } else {
+            scriptList.foreach { scriptName =>
+              s"./${scriptName}".!
+            }
           }
         }
+        ()
       }
-      ()
-    }
 
-    // Exit when batching is finished
-    runningFut onSuccess {
-      case _ => exit()
-    }
+      // Exit when batching is finished
+      runningFut onSuccess {
+        case _ => exit()
+      }
 
-    runningFut onFailure {
-      case e: Throwable => {
-        println(e.getMessage)
-        exit()
+      runningFut onFailure {
+        case e: Throwable => {
+          println(e.getMessage)
+          exit()
+        }
       }
     }
   }

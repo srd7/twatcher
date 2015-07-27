@@ -1,2 +1,2 @@
-GET    /                         twatcher.controllers.AppController.index
-GET    /active                   twatcher.controllers.AppController.isActive
+GET    /                            twatcher.controllers.AppController.index(str = "")
+GET    /:str                        twatcher.controllers.AppController.index(str)

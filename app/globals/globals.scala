@@ -12,19 +12,36 @@ object globals extends Config {
   private[this] val jsonConfig =
     Json.parse(jsonConfigFile).as[JsonConfigItem]
 
+    // val jsonRaw = try {
+    //   Json.parse(jsonConfigFile).as[JsonConfigItem]
+    // } catch {
+    //   case e: Throwable => {
+    //     println("=" * 32)
+    //     e.printStackTrace()
+    //     println("=" * 32)
+    //   }
+    // }
   /**
    * Account token list
    */
   val tokenList = jsonConfig.tokenList
+  // val tokenList = Nil
   /**
    * Period to detect death
    */
   val periodDay = jsonConfig.periodDay
+  // val periodDay = 7
 
   /**
    * Static Twitter App
    */
   val twitter = new Twitter(jsonConfig.consumerKey.key, jsonConfig.consumerKey.secret)
+  // val twitter = null
+
+  /**
+   * Scripts run when Twitter is not active
+   */
+  val scriptList = jsonConfig.scriptList
 }
 
 sealed trait Config {

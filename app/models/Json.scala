@@ -43,6 +43,7 @@ object Json {
   case class JsonConfigItem(
     tokenList  : List[RequestToken]
   , consumerKey: ConsumerKey
+  , scriptList : List[String]
   , periodDay  : Int
   )
 
@@ -50,8 +51,9 @@ object Json {
    * Reads for conf/config.json
    */
   implicit final val jsonConfigReads: Reads[JsonConfigItem] = (
-    (__ \ "token" ).read[List[RequestToken]] and
-    (__ \ "app"   ).read[ConsumerKey] and
-    (__ \ "period").read[Int]
+    (__ \ "token"  ).read[List[RequestToken]] and
+    (__ \ "app"    ).read[ConsumerKey] and
+    (__ \ "scripts").read[List[String]] and
+    (__ \ "period" ).read[Int]
   )(JsonConfigItem.apply _)
 }

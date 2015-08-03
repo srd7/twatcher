@@ -275,28 +275,28 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
   /**
    * GET followers
    */
-  private[this] def getFollower(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): IdListResult = {
+  private[this] def getFollowers(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): IdListResult = {
     twitterApiRepository.get(FOLLOWERS_IDS, token, params: _*).map{ response =>
       twitterApiRepository.solveCursor[List[Long]](response, "ids")
     }
   }
 
   // by userId
-  def getFollower(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
-    getFollower(token, "user_id" -> userId.toString)
-  def getFollower(userId: Long, cursor: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
-    getFollower(token, "user_id" -> userId.toString, "cursor" -> cursor.toString)
+  def getFollowers(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
+    getFollowers(token, "user_id" -> userId.toString)
+  def getFollowers(userId: Long, cursor: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
+    getFollowers(token, "user_id" -> userId.toString, "cursor" -> cursor.toString)
   // by screenName
-  def getFollower(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
-    getFollower(token, "screen_name" -> screenName)
-  def getFollower(screenName: String, cursor: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
-    getFollower(token, "screen_name" -> screenName, "cursor" -> cursor.toString)
+  def getFollowers(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
+    getFollowers(token, "screen_name" -> screenName)
+  def getFollowers(screenName: String, cursor: Long, token: RequestToken)(implicit ec: ExecutionContext): IdListResult =
+    getFollowers(token, "screen_name" -> screenName, "cursor" -> cursor.toString)
 
-  def getAllFollower(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Long]] =
+  def getAllFollowers(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Long]] =
     twitterApiRepository.getAllByCursor(
-      f = (cursor: Long) => getFollower(userId, cursor, token)
+      f = (cursor: Long) => getFollowers(userId, cursor, token)
     )
-  def getAllFollower(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Long]] =
+  def getAllFollowers(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Long]] =
     twitterApiRepository.getAllByCursor(
       f = (cursor: Long) => getFollowing(screenName, cursor, token)
     )

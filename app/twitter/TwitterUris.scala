@@ -5,7 +5,7 @@ object TwitterUris {
   final val SELF_PROFILE = "https://api.twitter.com/1.1/account/verify_credentials.json"
   final val FAVORITES_LIST = "https://api.twitter.com/1.1/favorites/list.json"
 
-  final val STATUSES_UPDATE = "https://api.twitter.com/1.1/statuses/update"
+  final val STATUSES_UPDATE = "https://api.twitter.com/1.1/statuses/update.json"
   final def STATUSES_DESTROY(id: Long) = s"https://api.twitter.com/1.1/statuses/destroy/${id}.json"
   final val FAVORITES_DESTROY = "https://api.twitter.com/1.1/favorites/destroy.json"
   final val BLOCKS_CREATE = "https://api.twitter.com/1.1/blocks/create.json"

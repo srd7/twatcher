@@ -204,33 +204,33 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
   private[this] def getFavorite(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): TweetsResult =
     twitterApiRepository.get[List[Tweet]](FAVORITES_LIST, token, params: _*)
   // by userId
-  def getFavorite(token: RequestToken, userId: Long, count: Int)(implicit ec: ExecutionContext): TweetsResult =
+  def getFavorite(userId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
     getFavorite(token, "user_id" -> userId.toString, "count" -> count.toString)
-  def getFavorite(token: RequestToken, userId: Long, maxId: Long, count: Int)(implicit ec: ExecutionContext): TweetsResult =
+  def getFavorite(userId: Long, maxId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
     getFavorite(token, "user_id" -> userId.toString, "max_id" -> maxId.toString, "count" -> count.toString)
   // by screenName
-  def getFavorite(token: RequestToken, screenName: String, count: Int)(implicit ec: ExecutionContext): TweetsResult =
+  def getFavorite(screenName: String, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
     getFavorite(token, "screen_name" -> screenName, "count" -> count.toString)
-  def getFavorite(token: RequestToken, screenName: String, maxId: Long, count: Int)(implicit ec: ExecutionContext): TweetsResult =
+  def getFavorite(screenName: String, maxId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
     getFavorite(token, "screen_name" -> screenName, "max_id" -> maxId.toString, "count" -> count.toString)
 
   /**
    * GET all favorites
    */
-  def getAllFavorite(token: RequestToken, userId: Long)(implicit ec: ExecutionContext): TweetsResult = {
+  def getAllFavorite(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult = {
     val count = 200 // max value of count
     twitterApiRepository.getAllByMaxId[Tweet](
-      f0 = getFavorite(token, userId, count)
-    , f1 = (maxId: Long) => getFavorite(token, userId, maxId, count)
+      f0 = getFavorite(userId, count, token)
+    , f1 = (maxId: Long) => getFavorite(userId, maxId, count, token)
     , toMaxId = (t: Tweet) => t.id
     , count
     )
   }
-  def getAllFavorite(token: RequestToken, screenName: String)(implicit ec: ExecutionContext): TweetsResult = {
+  def getAllFavorite(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult = {
     val count = 200
     twitterApiRepository.getAllByMaxId[Tweet](
-      f0 = getFavorite(token, screenName, count)
-    , f1 = (maxId: Long) => getFavorite(token, screenName, maxId, count)
+      f0 = getFavorite(screenName, count, token)
+    , f1 = (maxId: Long) => getFavorite(screenName, maxId, count, token)
     , toMaxId = (t: Tweet) => t.id
     , count
     )

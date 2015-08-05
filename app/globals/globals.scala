@@ -4,7 +4,11 @@ import twatcher.models.Json._
 import twatcher.twitter.Twitter
 
 import play.api.{Application, Configuration, Play}
+import play.api.Play.current
+import play.api.db.DB
 import play.api.libs.json.Json
+
+import slick.jdbc.JdbcBackend.Database
 
 import scala.io.Source
 
@@ -21,6 +25,7 @@ object globals extends Config {
     //     println("=" * 32)
     //   }
     // }
+
   /**
    * Account token list
    */
@@ -42,6 +47,9 @@ object globals extends Config {
    * Scripts run when Twitter is not active
    */
   val scriptList = jsonConfig.scriptList
+
+  // database
+  lazy val db = Database.forDataSource(DB.getDataSource())
 }
 
 sealed trait Config {

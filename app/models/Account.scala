@@ -5,7 +5,8 @@ import slick.driver.H2Driver.api._
 import play.api.libs.oauth.RequestToken
 
 case class Account (
-  screenName: String
+  userId: Long
+, screenName: String
 , accessToken: String
 , accessTokenSecret: String
 ) {
@@ -13,10 +14,11 @@ case class Account (
 }
 
 class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
+  def userId = column[Long]("USER_ID")
   def screenName = column[String]("SCREEN_NAME")
   def accessToken = column[String]("ACCESS_TOKEN")
   def accessTokenSecret = column[String]("ACCESS_TOKEN_SECRET")
-  def * = (screenName, accessToken, accessTokenSecret) <> (Account.tupled, Account.unapply)
+  def * = (userId, screenName, accessToken, accessTokenSecret) <> (Account.tupled, Account.unapply)
 }
 
 object Accounts extends TableQuery(new Accounts(_)) {

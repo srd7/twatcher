@@ -28,7 +28,7 @@ object globals extends Config {
   val twitter = new Twitter(twitterConsumerKey, twitterConsumerSecret)
 
   // Scripts run when Twitter is not active
-  val scriptList = fromDB(Scripts.initial)
+  val scriptList = fromDB(Scripts.initial).map(_.path)
 
   // database
   def db = Database.forDataSource(DB.getDataSource())

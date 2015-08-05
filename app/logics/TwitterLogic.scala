@@ -55,7 +55,7 @@ object TwitterLogic extends FutureUtils {
       , accessToken       = token.token
       , accessTokenSecret = token.secret
       )
-      _ <- db.run(Accounts.insert(account))
+      _ <- db.run(Accounts.upsert(account))
     } yield ()
   }
 }

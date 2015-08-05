@@ -13,4 +13,5 @@ class Configs(tag: Tag) extends Table[Config](tag, "CONFIG") {
 
 object Configs extends TableQuery(new Configs(_)) {
   def initial = this.result.head
+  def update(period: Int) = this.map(_.period).update(period)
 }

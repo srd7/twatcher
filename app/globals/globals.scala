@@ -19,14 +19,9 @@ object globals extends Config {
   // Static Twitter App
   val twitter = new Twitter(twitterConsumerKey, twitterConsumerSecret)
 
-  // Scripts run when Twitter is not active
-  val scriptList = fromDB(Scripts.initial).map(_.path)
-
   // database
   def db = Database.forDataSource(DB.getDataSource())
 
-  private[this] def fromDB[T](a: DBIOAction[T, NoStream, Nothing]): T =
-    Await.result(db.run(a), Duration.Inf)
 }
 
 sealed trait Config {

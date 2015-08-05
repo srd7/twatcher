@@ -14,7 +14,7 @@ class Scripts(tag: Tag) extends Table[Script](tag, "SCRIPT") {
 }
 
 object Scripts extends TableQuery(new Scripts(_)) {
-  def initial = this.result
+  def get = this.result
   def insert(script: Script) = this += script
   def update(script: Script) =
     this.filter(_.id === script.id).map(_.path).update(script.path)

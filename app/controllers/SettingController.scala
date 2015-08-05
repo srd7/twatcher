@@ -13,10 +13,11 @@ object SettingController extends Controller {
 
   def showSetting = Action.async { implicit request =>
     for {
-      accountList <- db.run(Accounts.get).map(_.toList)
       period      <- db.run(Configs.get).map(_.period)
+      accountList <- db.run(Accounts.get).map(_.toList)
+      scriptList  <- db.run(Scripts.get).map(_.toList)
     } yield {
-      Ok(views.html.showSetting(period, accountList))
+      Ok(views.html.showSetting(period, accountList, scriptList))
     }
   }
 

@@ -45,7 +45,7 @@ object TwitterController extends Controller {
       twitter.oauth.retrieveAccessToken(requestToken, verifier) match {
         case Right(t) => { // success
           TwitterLogic.insertUserProfile(twitter, RequestToken(t.token, t.secret))
-          Ok("done")
+          Redirect(routes.SettingController.showSetting)
         }
         case Left(e) => {
           InternalServerError(e.getMessage)

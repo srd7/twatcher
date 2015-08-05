@@ -2,7 +2,7 @@ package twatcher.controllers
 
 import twatcher.controllers.forms.SettingForm
 import twatcher.globals.db
-import twatcher.models.{Configs, Scripts}
+import twatcher.models.{Accounts, Configs, Scripts}
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -10,6 +10,15 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.Future
 
 object SettingController extends Controller {
+
+  def showSetting = Action.async { implicit request =>
+    for {
+      accountList <- db.run(Accounts.get).map(_.toList)
+      period      <- db.run(Configs.get).map(_.period)
+    } yield {
+      Ok(views.html.showSetting(period, accountList))
+    }
+  }
 
   def updatePeriod = Action.async { implicit request =>
     SettingForm.periodForm.bindFromRequest.fold(

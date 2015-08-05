@@ -1,0 +1,9 @@
+@import twatcher.models.Account
+@(period: Int, accountList: List[Account])
+
+
+<div>span: @period</div>
+
+@accountList.map { account =>
+  <div>@account</div>
+}

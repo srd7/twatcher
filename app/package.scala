@@ -1,5 +1,5 @@
 import twatcher.logics.TwitterLogic
-import twatcher.globals.{db, twitter, tokenList, scriptList}
+import twatcher.globals.db
 
 import play.api._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext

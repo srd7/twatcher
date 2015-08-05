@@ -14,7 +14,7 @@ case class Account (
 }
 
 class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
-  def userId = column[Long]("USER_ID")
+  def userId = column[Long]("USER_ID", O.PrimaryKey)
   def screenName = column[String]("SCREEN_NAME")
   def accessToken = column[String]("ACCESS_TOKEN")
   def accessTokenSecret = column[String]("ACCESS_TOKEN_SECRET")
@@ -22,7 +22,7 @@ class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
 }
 
 object Accounts extends TableQuery(new Accounts(_)) {
-  def initial = this.result
+  def get = this.result
   def upsert(account: Account) =
     this.insertOrUpdate(account)
 }

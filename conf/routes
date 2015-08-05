@@ -1,5 +1,6 @@
 GET    /                            twatcher.controllers.AppController.index(str = "")
-GET    /:str                        twatcher.controllers.AppController.index(str)
+
+GET    /setting                     twatcher.controllers.SettingController.showSetting
 
 POST   /update/period               twatcher.controllers.SettingController.updatePeriod
 POST   /create/script               twatcher.controllers.SettingController.createScript

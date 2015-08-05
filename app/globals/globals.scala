@@ -16,14 +16,6 @@ import scala.concurrent.duration.Duration
 
 object globals extends Config {
 
-  // Account token list
-  val tokenList = fromDB(Accounts.initial)
-
-  // Period to detect death
-  // val periodDay = jsonConfig.periodDay
-  private[this] val config = fromDB(Configs.initial)
-  val periodDay = config.period
-
   // Static Twitter App
   val twitter = new Twitter(twitterConsumerKey, twitterConsumerSecret)
 

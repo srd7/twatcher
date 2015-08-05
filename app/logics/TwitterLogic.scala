@@ -1,7 +1,7 @@
 package twatcher.logics
 
-import twatcher.globals.{db, periodDay}
-import twatcher.models.{Account, Accounts}
+import twatcher.globals.db
+import twatcher.models.{Account, Accounts, Configs}
 import twatcher.twitter.Twitter
 
 import play.api.libs.oauth.RequestToken
@@ -21,9 +21,13 @@ object TwitterLogic extends FutureUtils {
       //   => Future[Option[Tweet]]
       //   => Future[Option[Date]]
       //   => Future[Boolean]
-      twitter.getTimeline(account.screenName, account.token).map { tweetList =>
+      for {
+        tweetList <- twitter.getTimeline(account.screenName, account.token)
+        periodDay <- db.run(Configs.get).map(_.period)
         // The latest tweet must be head
-        val latestDateOp = tweetList.headOption.map(_.createdAt)
+        latestDateOp = tweetList.headOption.map(_.createdAt)
+
+      } yield {
         // If latestDateOp is None, the judge is true
         latestDateOp.fold(false){ date =>
           // The latest is newer than (Now - period) ?

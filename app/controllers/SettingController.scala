@@ -24,7 +24,7 @@ object SettingController extends Controller {
     )
   }
 
-  def insertScript = Action.async { implicit request =>
+  def createScript = Action.async { implicit request =>
     SettingForm.scriptForm.bindFromRequest.fold(
       formWithError => Future.successful(BadRequest)
     , script => {

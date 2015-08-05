@@ -14,8 +14,10 @@ object TwitterController extends Controller {
    * Redirect to Twitter Login
    */
   def login = Action { implicit request =>
+    val redirectUrl = "http://" + request.host + routes.TwitterController.loginDone
+
     // TODO: fix redirect url
-    twitter.oauth.retrieveRequestToken("http://localhost") match {
+    twitter.oauth.retrieveRequestToken(redirectUrl) match {
       case Right(t) => {
         Results.Redirect(twitter.oauth.redirectUrl(t.token)).withSession(
           SES_TOKEN  -> t.token

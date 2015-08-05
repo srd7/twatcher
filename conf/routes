@@ -1,2 +1,10 @@
 GET    /                            twatcher.controllers.AppController.index(str = "")
 GET    /:str                        twatcher.controllers.AppController.index(str)
+
+POST   /update/period               twatcher.controllers.SettingController.updatePeriod
+POST   /create/script               twatcher.controllers.SettingController.createScript
+POST   /update/script               twatcher.controllers.SettingController.updateScript
+POST   /delete/script               twatcher.controllers.SettingController.deleteScript
+
+GET    /twitter/login               twatcher.controllers.TwitterController.login
+GET    /twitter/callback            twatcher.controllers.TwitterController.loginDone

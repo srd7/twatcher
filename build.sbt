@@ -20,7 +20,8 @@ lazy val root = (
     , ws
     , evolutions
     , cache
-    , "com.typesafe.slick" %% "slick" % "3.0.0"
+    , "com.typesafe.slick" %% "slick"      % "3.0.0"
+    , "com.typesafe.akka"  %% "akka-actor" % "2.3.11"
     )
   )
 )

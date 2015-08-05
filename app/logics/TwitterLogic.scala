@@ -69,13 +69,13 @@ object TwitterLogic extends FutureUtils {
   /**
    * Say goodbye to all following and followers
    */
-  def goodbye(twitter: Twitter, tokenList: List[RequestToken]) = {
+  def goodbye(twitter: Twitter, accountList: List[Account]) = {
     val waitTime = 500L
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     // goodby async
-    tokenList.foreach(token => Future {
-      val screenName = token.screenName
-      val tokenPair = token.toOAuthToken
+    accountList.foreach(account => Future {
+      val screenName = account.screenName
+      val tokenPair = account.token
       for {
         following <- twitter.getAllFollowing(screenName, tokenPair)
         followers <- twitter.getAllFollowers(screenName, tokenPair)

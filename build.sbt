@@ -18,6 +18,7 @@ lazy val root = (
     libraryDependencies ++= Seq(
       jdbc
     , ws
+    , evolutions
     , "com.typesafe.slick" %% "slick" % "3.0.0"
     )
   )

@@ -1,7 +1,7 @@
 package twatcher.logics
 
 import twatcher.globals.periodDay
-import twatcher.models.RequestToken
+import twatcher.models.Account
 import twatcher.twitter.Twitter
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -10,16 +10,16 @@ object TwitterLogic extends FutureUtils {
   /**
    * Examine that an account is updated or not
    * @param twitter Twitter App instance
-   * @param token Request Token of the target account
+   * @param account
    */
-  private[this] def isActive(twitter: Twitter, token: RequestToken)
+  private[this] def isActive(twitter: Twitter, account: Account)
     (implicit ec: ExecutionContext): Future[Boolean] = {
       // mapping response
       // Future[List[Tweet]]
       //   => Future[Option[Tweet]]
       //   => Future[Option[Date]]
       //   => Future[Boolean]
-      twitter.getTimeline(token.screenName, token.toOAuthToken).map { tweetList =>
+      twitter.getTimeline(account.screenName, account.token).map { tweetList =>
         // The latest tweet must be head
         val latestDateOp = tweetList.headOption.map(_.createdAt)
         // If latestDateOp is None, the judge is true
@@ -33,11 +33,11 @@ object TwitterLogic extends FutureUtils {
   /**
    * Examine all account
    */
-  def isActiveAll(twitter: Twitter, tokenList: List[RequestToken]): Future[Boolean] = {
+  def isActiveAll(twitter: Twitter, accountList: List[Account]): Future[Boolean] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
     // Require to be active at least one account,
-    swapListFut(tokenList.map(isActive(twitter, _))).map(_.exists(identity))
+    swapListFut(accountList.map(isActive(twitter, _))).map(_.exists(identity))
   }
 }
 

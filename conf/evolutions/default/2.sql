@@ -1,0 +1,7 @@
+# --- !Ups
+INSERT INTO CONFIG(
+  PERIOD
+) VALUES (7);
+
+# --- !Downs
+DELETE FROM CONFIG WHERE 1;

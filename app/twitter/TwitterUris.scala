@@ -4,6 +4,7 @@ object TwitterUris {
   final val STATUSES_UPDATE = "https://api.twitter.com/1.1/statuses/update"
 
   final val USER_TIMELINE = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+  final val SELF_PROFILE = "https://api.twitter.com/1.1/account/verify_credentials.json"
 
   final val OAUTH_AUTHORIZE     = "https://api.twitter.com/oauth/authorize"
   final val OAUTH_ACCESS_TOKEN  = "https://api.twitter.com/oauth/access_token"

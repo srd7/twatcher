@@ -77,6 +77,14 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
 
   def getTimeline(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): Future[List[Tweet]] =
     twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "screen_name" -> screenName)
+
+  /**
+   * GET user profile
+   */
+  def getProfile(token: RequestToken)(implicit ec: ExecutionContext): Future[User] = {
+    twitterApiRepository.get[User](SELF_PROFILE, token)
+  }
+
 }
 
 abstract class TwitterApi(ck: ConsumerKey) extends TwitterApiRepositoryComponent with TwitterApiService {

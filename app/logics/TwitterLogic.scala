@@ -1,8 +1,10 @@
 package twatcher.logics
 
-import twatcher.globals.periodDay
-import twatcher.models.Account
+import twatcher.globals.{db, periodDay}
+import twatcher.models.{Account, Accounts}
 import twatcher.twitter.Twitter
+
+import play.api.libs.oauth.RequestToken
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,6 +40,23 @@ object TwitterLogic extends FutureUtils {
 
     // Require to be active at least one account,
     swapListFut(accountList.map(isActive(twitter, _))).map(_.exists(identity))
+  }
+
+  /**
+   * Get profile and Insert into DB about user
+   */
+  def insertUserProfile(twitter: Twitter, token: RequestToken): Future[Unit] = {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    for {
+      profile <- twitter.getProfile(token)
+      account = Account(
+        userId            = profile.twitterUserId
+      , screenName        = profile.screenName
+      , accessToken       = token.token
+      , accessTokenSecret = token.secret
+      )
+      _ <- db.run(Accounts.insert(account))
+    } yield ()
   }
 }
 

@@ -23,4 +23,5 @@ class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
 
 object Accounts extends TableQuery(new Accounts(_)) {
   def initial = this.result
+  def insert(account: Account) = this += account
 }

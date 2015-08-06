@@ -16,4 +16,8 @@ object SettingForm {
     , "path" -> nonEmptyText
     )(Script.apply)(Script.unapply _)
   )
+
+  val accountForm = Form(
+    "userId" -> longNumber
+  )
 }

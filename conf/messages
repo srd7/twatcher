@@ -1,4 +1,17 @@
 setting.period.title=Period
-setting.period.description=Period how long your Twitters do not updated to execute the scripts
+setting.period.description=Period how long your Twitter accounts do not updated to execute the scripts
+setting.period.unit=day(s)
 
+setting.script.title=Script
+setting.script.description=Scripts run when your Twitter accounts are not active
+
+setting.account.title=Twitter Accounts
+setting.account.description=Accounts twatcher watches whether they are active or not
+
+setting.account.authentication.title=Authentication
+setting.account.authentication.ok=Authenticated
+setting.account.authentication.failed=Authenticate Failed
+
+button.add=Add
 button.update=Update
+button.delete=Delete

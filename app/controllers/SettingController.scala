@@ -29,7 +29,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , period => {
         db.run(Configs.update(period)).map{ _ =>
-          Ok
+          Redirect(routes.SettingController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -42,7 +42,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.insert(script)).map { _ =>
-          Ok
+          Redirect(routes.SettingController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -55,7 +55,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.update(script)).map { _ =>
-          Ok
+          Redirect(routes.SettingController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -68,7 +68,20 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.delete(script)).map { _ =>
-          Ok
+          Redirect(routes.SettingController.showSetting)
+        } recover {
+          case e: Exception => InternalServerError("db error")
+        }
+      }
+    )
+  }
+
+  def deleteAccount = Action.async { implicit request =>
+    SettingForm.accountForm.bindFromRequest.fold(
+      formWithError => Future.successful(BadRequest)
+    , userId => {
+        db.run(Accounts.delete(userId)).map { _ =>
+          Redirect(routes.SettingController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }

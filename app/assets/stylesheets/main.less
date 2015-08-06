@@ -1,0 +1,22 @@
+@font-main: "メイリオ",Meiryo,"Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック",sans-serif,"lucida grande",tahoma,verdana,arial,'Hiragino Kaku Gothic Pro',Meiryo,'MS PGothic',sans-serif;
+
+body {
+  font-family: @font-main;
+  font-size: 14px;
+}
+
+@header-height: 45px;
+@header-background: #FFBE4F;
+@header-color: #656A71;
+
+// header
+#header {
+  height: @header-height;
+  background: @header-background;
+  color: @header-color;
+  font-size: 32px;
+  font-weight: bold;
+  padding: 5px 15px;
+}
+
+@import "setting.less";

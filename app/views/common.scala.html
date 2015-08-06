@@ -5,8 +5,21 @@
   <head>
     <meta charset="utf-8">
     <title>Twatcher</title>
+    <link type="text/css" rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstrap.min.css")">
+    <link type="text/css" rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
   </head>
   <body>
-    @body
+    <div id="header">
+      <div class="container">
+        <div id="logo">
+          Twatcher
+        </div>
+      </div>
+    </div>
+    <div id="body">
+      <div class="container">
+        @body
+      </div>
+    </div>
   </body>
 </html>

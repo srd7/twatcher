@@ -56,6 +56,7 @@ object TwitterLogic extends FutureUtils {
       account = Account(
         userId            = profile.twitterUserId
       , screenName        = profile.screenName
+      , imageUrl          = profile.profileImageUrl
       , accessToken       = token.token
       , accessTokenSecret = token.secret
       )

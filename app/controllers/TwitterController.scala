@@ -6,7 +6,7 @@ import twatcher.logics.TwitterLogic
 import play.api.mvc._
 import play.api.libs.oauth.RequestToken
 
-object TwitterController extends Controller {
+class TwitterController extends Controller {
   final val SES_TOKEN = "token"
   final val SES_SECRET = "secret"
 

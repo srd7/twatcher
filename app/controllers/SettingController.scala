@@ -6,10 +6,13 @@ import twatcher.models.{Accounts, Configs, Scripts}
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.concurrent.Future
 
-object SettingController extends Controller {
+import javax.inject.Inject
+
+class SettingController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   def showSetting = Action.async { implicit request =>
     for {

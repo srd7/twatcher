@@ -1,10 +1,21 @@
 @import twatcher.models.{Account, Script}
 
-@(period: Int, accountList: List[Account], scriptList: List[Script])
+@(period: Int, accountList: List[Account], scriptList: List[Script])(implicit messages: Messages)
 
 
-<div>span: @period</div>
+@common {
+  <div>
+    <span>
+      @Messages("setting.period.title")
+      @Messages("setting.period.description")
+    </span>
+    <form>
+      <input type="number" value="@period">
+      <input type="submit" value="@Messages("button.update")">
+    </form>
+  </div>
 
-@accountList.map { account =>
-  <div>@account</div>
+  @accountList.map { account =>
+    <div>@account</div>
+  }
 }

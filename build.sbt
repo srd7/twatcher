@@ -31,3 +31,5 @@ mappings in Universal <++= (packageBin in Compile) map { jar =>
     f -> ("bin/" + f.getName)
   }
 }
+
+routesGenerator := InjectedRoutesGenerator

@@ -8,13 +8,11 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.sys.process._
 
 object BatchLogic {
-  def run() {
-    val runningFut = for {
+  def run() = {
+    val runningFut = (for {
       accountList <- db.run(Accounts.get)
       checkResult <- TwitterLogic.isActiveAll(twitter, accountList.toList)
-    } yield checkResult
-
-    runningFut.map { isActive =>
+    } yield checkResult).map { isActive =>
       if (isActive) {
         // Do not have to run script
         println("You are alive!")
@@ -43,6 +41,8 @@ object BatchLogic {
         waitForExit()
       }
     }
+
+    runningFut
   }
 
   def waitForExit() {

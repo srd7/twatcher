@@ -8,7 +8,7 @@ setting.script.description=Scripts run when your Twitter accounts are not active
 setting.account.title=Twitter Accounts
 setting.account.description=Accounts twatcher watches whether they are active or not
 
-setting.account.authentication.title=Authentication
+setting.account.authentication.checking=Checking Authentication...
 setting.account.authentication.ok=Authenticated
 setting.account.authentication.failed=Authenticate Failed
 

@@ -73,19 +73,19 @@
         @Messages("setting.account.description")
       }{
         @accountList.map { account =>
-          <div class="account-form row">
-            <div class="col-sm-1">
-              <img src="@account.imageUrl" alt="@account.screenName">
+          <div class="account-form row" data-user-id="@account.userId">
+            <div class="col-md-1 col-sm-1">
+              <img src="@account.imageUrl" alt="@account.screenName" class="account-img">
             </div>
-            <div class="col-sm-2">
+            <div class="col-md-2 col-sm-2 account-screen-name">
               @@@account.screenName
             </div>
-            <div class="col-sm-3 authentication">
-              <span class="auth-check">@Messages("setting.account.authentication.title")</span>
+            <div class="col-md-3 col-sm-5 authentication">
+              <span class="auth-check">@Messages("setting.account.authentication.checking")</span>
               <span class="auth-ok">@Messages("setting.account.authentication.ok")</span>
               <span class="auth-failed">@Messages("setting.account.authentication.failed")</span>
             </div>
-            <div class="col-sm-2">
+            <div class="col-md-1 col-sm-2">
               <form action="@routes.SettingController.deleteAccount" method="POST">
                 <input type="hidden" name="userId" value="@account.userId">
                 <input type="submit" value="@Messages("button.delete")">

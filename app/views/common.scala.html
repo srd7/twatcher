@@ -1,3 +1,5 @@
+@import twatcher.controllers.{routes => ctrlRoutes}
+
 @(body: Html)
 
 <!DOCTYPE html>
@@ -21,5 +23,8 @@
         @body
       </div>
     </div>
+    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery.min.js")"></script>
+    <script type="text/javascript" src="@ctrlRoutes.AppController.jsRoutes"></script>
+    <script type="text/javascript" src="@routes.Assets.versioned("main.js")"></script>
   </body>
 </html>

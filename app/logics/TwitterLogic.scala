@@ -49,7 +49,7 @@ object TwitterLogic extends FutureUtils {
   /**
    * Get profile and Insert into DB about user
    */
-  def insertUserProfile(twitter: Twitter, token: RequestToken): Future[Unit] = {
+  def upsertUserProfile(twitter: Twitter, token: RequestToken): Future[Account] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     for {
       profile <- twitter.getProfile(token)
@@ -61,7 +61,7 @@ object TwitterLogic extends FutureUtils {
       , accessTokenSecret = token.secret
       )
       _ <- db.run(Accounts.upsert(account))
-    } yield ()
+    } yield account
   }
 }
 

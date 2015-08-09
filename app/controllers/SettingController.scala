@@ -1,11 +1,13 @@
 package twatcher.controllers
 
 import twatcher.controllers.forms.SettingForm
-import twatcher.globals.db
+import twatcher.globals.{db, twitter}
 import twatcher.models.{Accounts, Configs, Scripts}
+import twatcher.logics.TwitterLogic
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
 import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.concurrent.Future
@@ -87,5 +89,27 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
         }
       }
     )
+  }
+
+  /**
+   * Check Twitter Authentication and update Twitter info
+   */
+  def checkAccount(userId: Long) = Action.async { implicit request =>
+    db.run(Accounts.findByUserId(userId)).flatMap { accountOp =>
+      accountOp.fold[Future[Result]](Future.successful(BadRequest))(account =>
+        TwitterLogic.upsertUserProfile(twitter, account.token).map { newAccount =>
+          Ok(Json.obj(
+            "userId" -> newAccount.userId
+          , "screenName" -> newAccount.screenName
+          , "imageUrl" -> newAccount.imageUrl
+          ))
+        } recover {
+          case e: Exception => BadRequest(Json.obj(
+            "error" -> "authentication failed"
+          , "userId" -> userId
+          ))
+        }
+      )
+    }
   }
 }

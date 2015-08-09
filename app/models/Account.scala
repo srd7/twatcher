@@ -27,4 +27,5 @@ object Accounts extends TableQuery(new Accounts(_)) {
   def get = this.result
   def upsert(account: Account) = this.insertOrUpdate(account)
   def delete(userId: Long) = this.filter(_.userId === userId).delete
+  def findByUserId(userId: Long) = this.filter(_.userId === userId).result.headOption
 }

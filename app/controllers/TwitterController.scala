@@ -5,6 +5,9 @@ import twatcher.logics.TwitterLogic
 
 import play.api.mvc._
 import play.api.libs.oauth.RequestToken
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.concurrent.Future
 
 class TwitterController extends Controller {
   final val SES_TOKEN = "token"
@@ -31,7 +34,7 @@ class TwitterController extends Controller {
   /**
    * Return from Twitter login
    */
-  def loginDone = Action { implicit request =>
+  def loginDone = Action.async { implicit request =>
     // Check session and get parameter and extract info
     // If any info is lack, login is failed.
     val requestInfoOp = for {
@@ -40,14 +43,15 @@ class TwitterController extends Controller {
       verifier <- request.queryString.get("oauth_verifier").flatMap(_.headOption)
     } yield (RequestToken(token, secret), verifier)
 
-    requestInfoOp.fold[Result](BadRequest){ case (requestToken ,verifier) =>
+    requestInfoOp.fold[Future[Result]](Future.successful(BadRequest)){ case (requestToken ,verifier) =>
       twitter.oauth.retrieveAccessToken(requestToken, verifier) match {
         case Right(t) => { // success
-          TwitterLogic.insertUserProfile(twitter, RequestToken(t.token, t.secret))
-          Redirect(routes.SettingController.showSetting)
+          TwitterLogic.upsertUserProfile(twitter, RequestToken(t.token, t.secret)).map { _ =>
+            Redirect(routes.SettingController.showSetting)
+          }
         }
         case Left(e) => {
-          InternalServerError(e.getMessage)
+          Future.successful(InternalServerError(e.getMessage))
         }
       }
     }

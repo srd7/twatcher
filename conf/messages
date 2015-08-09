@@ -1,5 +1,16 @@
-header.howtouse=How to Use
+header.index=Top
 header.setting=Setting
+
+index.whatisthis.title=What is this?
+index.whatisthis.description=When your Twitter is not updated for certain period, Twatcher will execute your script.
+index.usage.title=Usage
+index.usage.description=Set up to run this when your PC boots.
+index.usage.google=Google
+index.caution.title=Caution
+index.caution.description.1=Whatever reason you do not update your Twitter, Twatcher will run the program.
+index.caution.description.2=If Twatcher kills your important files, we do not take any responsibility.
+index.setting.title=Setting
+index.setting.description=Click Setting link above.
 
 setting.period.title=Period
 setting.period.description=Period how long your Twitter accounts do not updated to execute the scripts

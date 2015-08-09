@@ -5,7 +5,7 @@ INSERT INTO CONFIG(
 
 INSERT INTO SCRIPT(
   PATH
-) VALUES ('script');
+) VALUES ('script.bat');
 
 # --- !Downs
 DELETE FROM CONFIG WHERE 1;

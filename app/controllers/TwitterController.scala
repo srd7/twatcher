@@ -47,7 +47,7 @@ class TwitterController extends Controller {
       twitter.oauth.retrieveAccessToken(requestToken, verifier) match {
         case Right(t) => { // success
           TwitterLogic.upsertUserProfile(twitter, RequestToken(t.token, t.secret)).map { _ =>
-            Redirect(routes.SettingController.showSetting)
+            Redirect(routes.AppController.showSetting)
           }
         }
         case Left(e) => {

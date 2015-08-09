@@ -8,30 +8,17 @@ import twatcher.logics.TwitterLogic
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
-import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.concurrent.Future
 
-import javax.inject.Inject
-
-class SettingController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
-
-  def showSetting = Action.async { implicit request =>
-    for {
-      period      <- db.run(Configs.get).map(_.period)
-      accountList <- db.run(Accounts.get).map(_.toList)
-      scriptList  <- db.run(Scripts.get).map(_.toList)
-    } yield {
-      Ok(views.html.showSetting(period, accountList, scriptList))
-    }
-  }
+class SettingController  extends Controller {
 
   def updatePeriod = Action.async { implicit request =>
     SettingForm.periodForm.bindFromRequest.fold(
       formWithError => Future.successful(BadRequest)
     , period => {
         db.run(Configs.update(period)).map{ _ =>
-          Redirect(routes.SettingController.showSetting)
+          Redirect(routes.AppController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -44,7 +31,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.insert(script)).map { _ =>
-          Redirect(routes.SettingController.showSetting)
+          Redirect(routes.AppController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -57,7 +44,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.update(script)).map { _ =>
-          Redirect(routes.SettingController.showSetting)
+          Redirect(routes.AppController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -70,7 +57,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , script => {
         db.run(Scripts.delete(script)).map { _ =>
-          Redirect(routes.SettingController.showSetting)
+          Redirect(routes.AppController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }
@@ -83,7 +70,7 @@ class SettingController @Inject()(val messagesApi: MessagesApi) extends Controll
       formWithError => Future.successful(BadRequest)
     , userId => {
         db.run(Accounts.delete(userId)).map { _ =>
-          Redirect(routes.SettingController.showSetting)
+          Redirect(routes.AppController.showSetting)
         } recover {
           case e: Exception => InternalServerError("db error")
         }

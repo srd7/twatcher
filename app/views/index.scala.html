@@ -1,0 +1,21 @@
+@()(implicit messages: Messages)
+
+@common {
+  <h1>@Messages("index.whatisthis.title")</h1>
+  <p>@Messages("index.whatisthis.description")<p>
+
+  <h1>@Messages("index.usage.title")</h1>
+  <p>
+    @Messages("index.usage.description")
+    <p class="strong">
+      <a href="https://www.google.co.jp/?q=startup%20program">@Messages("index.usage.google")</a>
+    </p>
+  <p>
+
+  <h1>@Messages("index.caution.title")</h1>
+  <p>@Messages("index.caution.description.1")<p>
+  <p class="bold">@Messages("index.caution.description.2")<p>
+
+  <h1>@Messages("index.setting.title")</h1>
+  <p>@Messages("index.setting.description")</p>
+}

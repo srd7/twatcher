@@ -12,7 +12,7 @@ object Global extends GlobalSettings {
     mode match {
       case Batch   => BatchLogic.run()
       case Server  => println("server") // TODO: Start Watching Actor
-      case Setting => println("setting")
+      case Setting => println("open http://localhost:9000 by browser.")
       case Default => println("default")
     }
   }

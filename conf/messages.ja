@@ -1,0 +1,32 @@
+header.index=トップ
+header.setting=設定
+
+index.whatisthis.title=何これ？
+index.whatisthis.description=一定期間 Twitter の更新がなかった場合、突然死と見なして任意のスクリプトを実行します。
+index.usage.title=使用例
+index.usage.description=パソコン起動時に実行できるように仕掛けておき、突然死後に家族がパソコンを起動したらハードディスクのデータを消すようにしておくなど。
+index.usage.google=ぐぐれ。
+index.caution.title=注意
+index.caution.description.1=突然死以外の事情で Twitter の更新がなかった場合でも作動します。
+index.caution.description.2=それにより大切なデータが失われてしまっても、作者は一切責任を負いません。
+index.setting.title=設定
+index.setting.description=上部の設定リンクを押してください
+index.contact.title=作者への連絡
+
+setting.period.title=期間
+setting.period.description=この期間だけツイッターが更新されてないとスクリプトが実行されます
+setting.period.unit=日
+
+setting.script.title=スクリプト
+setting.script.description=ツイッターの更新がなかった時に実行されるスクリプト
+
+setting.account.title=ツイッターアカウント
+setting.account.description=アクティブかどうかを確認するツイッターアカウント
+
+setting.account.authentication.checking=アプリ連携確認中...
+setting.account.authentication.ok=アプリ連携成功
+setting.account.authentication.failed=アプリ連携失敗
+
+button.add=追加
+button.update=更新
+button.delete=削除

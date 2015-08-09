@@ -2,11 +2,14 @@ package twatcher.controllers
 
 import twatcher.models.{Accounts, Configs, Scripts}
 import twatcher.globals.db
+import twatcher.logics.BatchLogic
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.routing.JavaScriptReverseRouter
 import play.api.i18n.{I18nSupport, MessagesApi}
+
+import scala.concurrent.Future
 
 import javax.inject.Inject
 
@@ -23,6 +26,13 @@ class AppController @Inject()(val messagesApi: MessagesApi) extends Controller w
     } yield {
       Ok(views.html.showSetting(period, accountList, scriptList))
     }
+  }
+
+  def shutdown = Action {
+    Future {
+      BatchLogic.exit()
+    }
+    Ok(views.html.shutdown())
   }
 
 

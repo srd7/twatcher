@@ -1,5 +1,6 @@
 header.index=Top
 header.setting=Setting
+header.shutdown=Shutdown Twatcher
 
 index.whatisthis.title=What is this?
 index.whatisthis.description=When your Twitter is not updated for certain period, Twatcher will execute your script.

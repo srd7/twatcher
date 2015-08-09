@@ -1,5 +1,6 @@
 header.index=トップ
 header.setting=設定
+header.shutdown=Twatcher終了
 
 index.whatisthis.title=何これ？
 index.whatisthis.description=一定期間 Twitter の更新がなかった場合、突然死と見なして任意のスクリプトを実行します。

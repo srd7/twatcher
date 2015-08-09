@@ -34,22 +34,26 @@ object BatchLogic {
     }
 
     runningFut onSuccess {
-      case _ => exit()
+      case _ => waitForExit()
     }
 
     runningFut onFailure {
       case e: Throwable => {
         e.printStackTrace()
-        exit()
+        waitForExit()
       }
     }
   }
 
-  def exit() {
+  def waitForExit() {
     (10 to 1 by -1).foreach { n =>
       println(s"exit program in $n seconds...")
       Thread.sleep(1000L)
     }
+    exit()
+  }
+
+  def exit() {
     if (isWindows) {
       "cmd /c exit.bat".!
     }

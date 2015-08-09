@@ -27,9 +27,16 @@ lazy val root = (
 
 // Add static script files to bin/ directory
 mappings in Universal <++= (packageBin in Compile) map { jar =>
-  val scriptsDir = new java.io.File("scripts/")
+  val scriptsDir = new java.io.File("scripts/bin")
   scriptsDir.listFiles.toSeq.map { f =>
     f -> ("bin/" + f.getName)
+  }
+}
+
+mappings in Universal <++= (packageBin in Compile) map { jar =>
+  val scriptsDir = new java.io.File("scripts/public")
+  scriptsDir.listFiles.toSeq.map { f =>
+    f -> f.getName
   }
 }
 

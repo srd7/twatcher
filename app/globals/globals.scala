@@ -2,6 +2,7 @@ package twatcher
 
 import twatcher.twitter.Twitter
 import twatcher.models.{Accounts, Configs, Scripts}
+import twatcher.mode.Mode
 
 import play.api.{Application, Configuration, Play}
 import play.api.Play.current
@@ -27,6 +28,8 @@ object globals extends Config {
 sealed trait Config {
   protected[this] val twitterConsumerKey    = getString("twatcher.twitter.consumer.key")
   protected[this] val twitterConsumerSecret = getString("twatcher.twitter.consumer.secret")
+
+  val mode = Mode(getString("twatcher.mode"))
 
   private[this] def getString(path: String) = getPlayConfig(_.getString (path))
 

@@ -9,6 +9,7 @@ import play.api.libs.ws.{WS, WSRequest}
 import play.api.Play.current
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 
 sealed trait TwitterApiRepositoryComponent {
   val twitterApiRepository: TwitterApiRepository
@@ -23,7 +24,7 @@ sealed trait TwitterApiRepositoryComponent {
     private[this] def buildRequest(url: String, token: RequestToken, param: (String, String)*): WSRequest = {
       WS.url(url)
         .sign(OAuthCalculator(ck, token))
-        .withRequestTimeout(5000L) // milliseconds. TODO: to constant
+        .withRequestTimeout(5.second.toMillis)
         .withQueryString(param: _*)
     }
 
@@ -37,15 +38,39 @@ sealed trait TwitterApiRepositoryComponent {
     }
 
     /**
+     * Generate raw URL of request
+     */
+    private[this] def getFullUrl(req: WSRequest): String = {
+      val queryString = req.queryString
+      val query = queryString.keys.flatMap{ key =>
+        queryString(key) match {
+          case values if values.length > 1 => {
+            values.zipWithIndex.map { case (value, i) =>
+              s"${key}[${i}]=$value"
+            }
+          }
+          case value => {
+            List(s"${key}=${value(0)}")
+          }
+        }
+      }.mkString("&")
+      req.url + "?" + query
+    }
+
+    /**
      * Send GET request to Twitter
      */
     def get[T : Reads](url: String, token: RequestToken, param: (String, String)*)
       (implicit ec: ExecutionContext): Future[T] = {
         val request = buildRequest(url, token, param: _*)
-        for {
-          response  <- request.get()
-          validated <- errorCheck(response.json)
-        } yield (validated.as[T])
+        val fullUrl = getFullUrl(request)
+        TwitterCache.getAs[JsValue](fullUrl, token).fold(
+          for {
+            response  <- request.get()
+            validated <- errorCheck(response.json)
+            _         =  TwitterCache.set(fullUrl, token, validated, 15.minutes)
+          } yield (validated.as[T])
+        )(cached => Future.successful(cached.as[T]))
       }
 
     /**

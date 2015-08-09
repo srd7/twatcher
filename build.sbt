@@ -19,6 +19,7 @@ lazy val root = (
       jdbc
     , ws
     , evolutions
+    , cache
     , "com.typesafe.slick" %% "slick" % "3.0.0"
     )
   )

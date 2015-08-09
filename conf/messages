@@ -1,3 +1,6 @@
+header.howtouse=How to Use
+header.setting=Setting
+
 setting.period.title=Period
 setting.period.description=Period how long your Twitter accounts do not updated to execute the scripts
 setting.period.unit=day(s)

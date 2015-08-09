@@ -5,7 +5,7 @@ body {
   font-size: 14px;
 }
 
-@header-height: 45px;
+@header-height: 48px;
 @header-background: #FFBE4F;
 @header-color: #656A71;
 
@@ -14,9 +14,29 @@ body {
   height: @header-height;
   background: @header-background;
   color: @header-color;
+  padding: 5px 15px;
+}
+
+#logo {
   font-size: 32px;
   font-weight: bold;
-  padding: 5px 15px;
+  display: inline-block;
+  margin-right: 30px;
+}
+
+#links {
+  display: inline-block;
+  a {
+    font-size: 24px;
+    text-decoration: underline;
+    margin: 0 12px;
+  }
+}
+
+#followme {
+  display: inline-block;
+  float: right;
+  margin-top: 15px;
 }
 
 @import "setting.less";

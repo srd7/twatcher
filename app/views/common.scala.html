@@ -1,6 +1,11 @@
 @import twatcher.controllers.{routes => ctrlRoutes}
 
-@(body: Html)
+@(body: Html)(implicit messages: Messages)
+
+@followButton = {
+<a href="https://twitter.com/srd7" class="twitter-follow-button" data-show-count="false">Follow @@srd7</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+}
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +20,13 @@
       <div class="container">
         <div id="logo">
           Twatcher
+        </div>
+        <div id="links">
+          <a href="@ctrlRoutes.AppController.index">@Messages("header.howtouse")</a>
+          <a href="@ctrlRoutes.SettingController.showSetting">@Messages("header.setting")</a>
+        </div>
+        <div id="followme">
+          @followButton
         </div>
       </div>
     </div>

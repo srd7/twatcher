@@ -20,19 +20,21 @@ If Twatcher kills your important files, we do not take any responsibility.
 ## How to use
 
 - Download zip [here](https://github.com/srd7/twatcher/releases/)
-- Create your Twitter Client [here](https://apps.twitter.com/). Any permission is fine.
-- Copy `conf/config-sample.json` to `conf/config.json` and modify it.
-- In `token`  
-    fill your Twitter ID (without @) to `screen_name`  
-    fill `Access Token` and `Access Token Secret` in `Your Access Token` to `token` and `secret`  
-- In `app`
-    fill `Consumer Key (API Key)` and `Consumer Secret (API Secret)` to `key` and `secret`
-- Execute script if you do not update your Twitter for `period` days. For the sample, it is 1 week.
-- `scripts` is files you want to run.
-- Write your Script `bin/script.bat` (for Windows).
-- When you run `bin/twatcher.bat`, check your latest tweet date.
-  Run the scripts if last tweet date is older than certain period.
-- If you register `bin/twatcher.bat` to the startup, twatcher is executed when you boot the PC.
+- Execute `setting.bat` (on Windows) and set up the information.
+- your script files must be put in `bin` directory(Any script path will comming soon)
+- Register `batch.bat` to your start up program.
+
+## Explanation
+
+- `setting.bat`: Start browser and set up Accont/Script information.
+- `batch.bat`: Listen to Twitter whether the accounts are active or not and execute scripts.
+- `server.bat`: Comming soon
+- `exit.bat`: Kill running Twatcher.
+
+## FAQ
+
+- App does not start  
+  I know too long file path bothers to start up. Please put the App in shallower directory.
 
 ## Operation environment
 

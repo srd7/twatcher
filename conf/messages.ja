@@ -28,6 +28,8 @@ setting.account.authentication.checking=アプリ連携確認中...
 setting.account.authentication.ok=アプリ連携成功
 setting.account.authentication.failed=アプリ連携失敗
 
+app.terminated=アプリが終了されました。ウィンドウを閉じてください。
+
 button.add=追加
 button.update=更新
 button.delete=削除

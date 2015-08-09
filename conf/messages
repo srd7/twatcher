@@ -29,6 +29,8 @@ setting.account.authentication.checking=Checking Authentication...
 setting.account.authentication.ok=Authenticated
 setting.account.authentication.failed=Authenticate Failed
 
+app.terminated=App has terminated. Please close this window.
+
 button.add=Add
 button.update=Update
 button.delete=Delete

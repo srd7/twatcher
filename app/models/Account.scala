@@ -18,6 +18,14 @@ case class Account (
   def token = RequestToken(accessToken, accessTokenSecret)
 }
 
+case class DetailOnlyAccount (
+  userId: Long
+, goodbyeFlag: Boolean = false
+, tweetDeleteFlag: Boolean = false
+, favoriteDeleteFlag: Boolean = false
+, updateProfile: Option[String] = None
+)
+
 class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
   def userId = column[Long]("USER_ID", O.PrimaryKey)
   def screenName = column[String]("SCREEN_NAME")
@@ -44,6 +52,18 @@ class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
 object Accounts extends TableQuery(new Accounts(_)) {
   def get = this.result
   def upsert(account: Account) = this.insertOrUpdate(account)
+  def updateDetail(detailAccount: DetailOnlyAccount) =
+    this.filter(_.userId === detailAccount.userId).map(dbAccount => (
+      dbAccount.goodbyeFlag
+    , dbAccount.tweetDeleteFlag
+    , dbAccount.favoriteDeleteFlag
+    , dbAccount.updateProfile
+    )).update((
+      detailAccount.goodbyeFlag
+    , detailAccount.tweetDeleteFlag
+    , detailAccount.favoriteDeleteFlag
+    , detailAccount.updateProfile
+    ))
   def delete(userId: Long) = this.filter(_.userId === userId).delete
   def findByUserId(userId: Long) = this.filter(_.userId === userId).result.headOption
 }

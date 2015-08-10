@@ -7,6 +7,7 @@ POST    /update/period              twatcher.controllers.SettingController.updat
 POST    /create/script              twatcher.controllers.SettingController.createScript
 POST    /update/script              twatcher.controllers.SettingController.updateScript
 POST    /delete/script              twatcher.controllers.SettingController.deleteScript
+POST    /update/account             twatcher.controllers.SettingController.updateAccount
 POST    /delete/account             twatcher.controllers.SettingController.deleteAccount
 POST    /check/account/:userId      twatcher.controllers.SettingController.checkAccount(userId: Long)
 

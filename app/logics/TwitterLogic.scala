@@ -51,13 +51,19 @@ object TwitterLogic extends FutureUtils {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     for {
       profile <- twitter.getProfile(token)
-      account = Account(
-        userId            = profile.twitterUserId
-      , screenName        = profile.screenName
+      accountOp <- db.run(Accounts.findByUserId(profile.twitterUserId))
+      account = accountOp.fold(Account(
+          userId            = profile.twitterUserId
+        , screenName        = profile.screenName
+        , imageUrl          = profile.profileImageUrl
+        , accessToken       = token.token
+        , accessTokenSecret = token.secret
+      ))(_.copy(
+        screenName        = profile.screenName
       , imageUrl          = profile.profileImageUrl
       , accessToken       = token.token
       , accessTokenSecret = token.secret
-      )
+      ))
       _ <- db.run(Accounts.upsert(account))
     } yield account
   }

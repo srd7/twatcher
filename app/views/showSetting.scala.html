@@ -20,6 +20,8 @@
   </div>
 }
 
+@checked(flag: Boolean) = { @if(flag){checked="checked"} else {}}
+
 @common {
   <div id="setting">
     <div class="row setting-row">
@@ -74,22 +76,61 @@
       }{
         @accountList.map { account =>
           <div class="account-form row" data-user-id="@account.userId">
-            <div class="col-md-1 col-sm-1">
+            <div class="col-sm-1">
               <img src="@account.imageUrl" alt="@account.screenName" class="account-img">
             </div>
-            <div class="col-md-2 col-sm-2 account-screen-name">
-              @@@account.screenName
-            </div>
-            <div class="col-md-3 col-sm-5 authentication">
-              <span class="auth-check">@Messages("setting.account.authentication.checking")</span>
-              <span class="auth-ok">@Messages("setting.account.authentication.ok")</span>
-              <span class="auth-failed">@Messages("setting.account.authentication.failed")</span>
-            </div>
-            <div class="col-md-1 col-sm-2">
-              <form action="@routes.SettingController.deleteAccount" method="POST">
-                <input type="hidden" name="userId" value="@account.userId">
-                <input type="submit" value="@Messages("button.delete")">
-              </form>
+            <div class="col-sm-11">
+              @* row 1 *@
+              <div class="row">
+                <div class="col-md-2 col-sm-2 account-screen-name">
+                  @@@account.screenName
+                </div>
+                <div class="col-md-3 col-sm-5 authentication">
+                  <span class="auth-check">@Messages("setting.account.authentication.checking")</span>
+                  <span class="auth-ok">@Messages("setting.account.authentication.ok")</span>
+                  <span class="auth-failed">@Messages("setting.account.authentication.failed")</span>
+                </div>
+              </div>
+              @* / row 1 *@
+              @* row 2 *@
+              <div class="row">
+                <div class="col-sm-4">
+                  <label>
+                    <input type="checkbox" form="update-account" name="goodbyeFlag" @checked(account.goodbyeFlag)>
+                    @Messages("setting.account.goodbyeflag")
+                  </label>
+                </div>
+                <div class="col-sm-4">
+                  <label>
+                    <input type="checkbox" form="update-account" name="tweetDeleteFlag" @checked(account.tweetDeleteFlag)>
+                    @Messages("setting.account.tweetdeleteflag")
+                  </label>
+                </div>
+                <div class="col-sm-4">
+                  <label>
+                    <input type="checkbox" form="update-account" name="favoriteDeleteFlag" @checked(account.favoriteDeleteFlag)>
+                    @Messages("setting.account.favoritedeleteflag")
+                  </label>
+                </div>
+              </div>
+              @* / row 2 *@
+              @* row 3 *@
+              <div class="row">
+                <div class="col-sm-10">
+                  <textarea name="updateProfile" form="update-account" placeholder="@Messages("setting.account.updateprofile")">@account.updateProfile.getOrElse("")</textarea>
+                </div>
+                <div class="col-sm-2">
+                  <form action="@routes.SettingController.updateAccount" method="POST" id="update-account">
+                    <input type="hidden" name="userId" value="@account.userId">
+                    <input type="submit" value="@Messages("button.update")">
+                  </form>
+                  <form action="@routes.SettingController.deleteAccount" method="POST">
+                    <input type="hidden" name="userId" value="@account.userId">
+                    <input type="submit" value="@Messages("button.delete")">
+                  </form>
+                </div>
+              </div>
+              @* / row 3 *@
             </div>
           </div>
         }

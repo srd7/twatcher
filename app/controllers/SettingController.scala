@@ -65,6 +65,19 @@ class SettingController  extends Controller {
     )
   }
 
+  def updateAccount = Action.async { implicit request =>
+    SettingForm.accountDetailForm.bindFromRequest.fold(
+      formWithError => Future.successful(BadRequest)
+    , detailOnlyAccount => {
+        db.run(Accounts.updateDetail(detailOnlyAccount)).map { _ =>
+          Redirect(routes.AppController.showSetting)
+        } recover {
+          case e: Exception => InternalServerError("db error")
+        }
+      }
+    )
+  }
+
   def deleteAccount = Action.async { implicit request =>
     SettingForm.accountForm.bindFromRequest.fold(
       formWithError => Future.successful(BadRequest)

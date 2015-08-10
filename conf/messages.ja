@@ -27,6 +27,10 @@ setting.account.description=アクティブかどうかを確認するツイッ�
 setting.account.authentication.checking=アプリ連携確認中...
 setting.account.authentication.ok=アプリ連携成功
 setting.account.authentication.failed=アプリ連携失敗
+setting.account.goodbyeflag=フォロワーを解除する
+setting.account.tweetdeleteflag=ツイートを削除する
+setting.account.favoritedeleteflag=ふぁぼを削除する
+setting.account.updateprofile=プロフィールを更新する
 
 app.terminated=アプリが終了されました。ウィンドウを閉じてください。
 

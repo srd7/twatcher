@@ -10,6 +10,10 @@ case class Account (
 , imageUrl: String
 , accessToken: String
 , accessTokenSecret: String
+, goodbyeFlag: Boolean = false
+, tweetDeleteFlag: Boolean = false
+, favoriteDeleteFlag: Boolean = false
+, updatePrifole: Option[String] = None
 ) {
   def token = RequestToken(accessToken, accessTokenSecret)
 }
@@ -20,7 +24,21 @@ class Accounts(tag: Tag) extends Table[Account](tag, "ACCOUNT") {
   def imageUrl = column[String]("IMAGE_URL")
   def accessToken = column[String]("ACCESS_TOKEN")
   def accessTokenSecret = column[String]("ACCESS_TOKEN_SECRET")
-  def * = (userId, screenName, imageUrl, accessToken, accessTokenSecret) <> (Account.tupled, Account.unapply)
+  def goodbyeFlag = column[Boolean]("GOODBYE_FLAG")
+  def tweetDeleteFlag = column[Boolean]("TWEET_DELETE_FLAG")
+  def favoriteDeleteFlag = column[Boolean]("FAVORITE_DELETE_FLAG")
+  def updateProfile = column[Option[String]]("UPDATE_PROFILE")
+  def * = (
+    userId
+  , screenName
+  , imageUrl
+  , accessToken
+  , accessTokenSecret
+  , goodbyeFlag
+  , tweetDeleteFlag
+  , favoriteDeleteFlag
+  , updateProfile
+  ) <> (Account.tupled, Account.unapply)
 }
 
 object Accounts extends TableQuery(new Accounts(_)) {

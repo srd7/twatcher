@@ -16,12 +16,13 @@ object TwitterLogic extends FutureUtils {
    */
   private[this] def isActive(twitter: Twitter, periodDay: Int, account: Account)
     (implicit ec: ExecutionContext): Future[Boolean] = {
+      val count = 10 // just in case
       // mapping response
       // Future[List[Tweet]]
       //   => Future[Option[Tweet]]
       //   => Future[Option[Date]]
       //   => Future[Boolean]
-      twitter.getTimeline(account.screenName, account.token).map { tweetList =>
+      twitter.getTimeline(account.screenName, count, account.token).map { tweetList =>
         // The latest tweet must be head
         // If latestDateOp is None, the judge is true
         tweetList.headOption.map(_.createdAt).fold(false) { date =>
@@ -79,6 +80,23 @@ object TwitterLogic extends FutureUtils {
         Thread.sleep(waitTime)
       }
     } yield ()
+  }
+
+  /**
+   * Delete all tweets available
+   */
+  def deleteTweets(twitter: Twitter, account: Account) = {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    val waitTime = 500L
+    val screenName = account.screenName
+    val tokenPair = account.token
+
+    twitter.getAllTweets(screenName, tokenPair).map { tweetList =>
+      tweetList.foreach { tweet =>
+        twitter.delete(tweet.id, tokenPair)
+        Thread.sleep(waitTime)
+      }
+    }
   }
 
   /**

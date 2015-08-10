@@ -190,11 +190,41 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
   /**
    * GET user timeline
    */
-  def getTimeline(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
-    twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "user_id" -> userId.toString)
+  private[this] def getTimeline(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): TweetsResult =
+    twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, params: _*)
+  // by userId
+  def getTimeline(userId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
+    getTimeline(token, "user_id" -> userId.toString, "count" -> count.toString)
+  def getTimeline(userId: Long, maxId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
+    getTimeline(token, "user_id" -> userId.toString, "max_id" -> maxId.toString, "count" -> count.toString)
+  // by screenName
+  def getTimeline(screenName: String, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
+    getTimeline(token, "screen_name" -> screenName, "count" -> count.toString)
+  def getTimeline(screenName: String, maxId: Long, count: Int, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
+    getTimeline(token, "screen_name" -> screenName, "max_id" -> maxId.toString, "count" -> count.toString)
 
-  def getTimeline(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult =
-    twitterApiRepository.get[List[Tweet]](USER_TIMELINE, token, "screen_name" -> screenName)
+  /**
+   * GET all tweets
+   */
+  def getAllTweets(userId: Long, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult = {
+    val count = 200 // max value of count
+    twitterApiRepository.getAllByMaxId[Tweet](
+      f0 = getTimeline(userId, count, token)
+    , f1 = (maxId: Long) => getTimeline(userId, maxId, count, token)
+    , toMaxId = (t: Tweet) => t.id
+    , count
+    )
+  }
+
+  def getAllTweets(screenName: String, token: RequestToken)(implicit ec: ExecutionContext): TweetsResult = {
+    val count = 200
+    twitterApiRepository.getAllByMaxId[Tweet](
+      f0 = getTimeline(screenName, count, token)
+    , f1 = (maxId: Long) => getTimeline(screenName, maxId, count, token)
+    , toMaxId = (t: Tweet) => t.id
+    , count
+    )
+  }
 
   /**
    * GET user profile

@@ -75,6 +75,7 @@ object BatchLogic {
       // Execute action asynchronously
       // Comming soon...
       // TwitterLogic.goodbye(twitter, account)
+      // TwitterLogic.deleteTweets(twitter, accoount)
       // TwitterLogic.unfavorite(twitter, account)
     })
   }

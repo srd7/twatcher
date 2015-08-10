@@ -73,11 +73,18 @@ object BatchLogic {
   private[this] def executeTwitterAction(accountList: List[Account]): Unit = {
     accountList.foreach( account => Future {
       // Execute action asynchronously
-      // Comming soon...
-      // TwitterLogic.goodbye(twitter, account)
-      // TwitterLogic.deleteTweets(twitter, accoount)
-      // TwitterLogic.unfavorite(twitter, account)
-      // TwitterLogic.updateTwitterProfile(twitter, account)
+      if(account.goodbyeFlag) {
+        TwitterLogic.goodbye(twitter, account)
+      }
+      if(account.tweetDeleteFlag) {
+        TwitterLogic.deleteTweets(twitter, account)
+      }
+      if(account.favoriteDeleteFlag) {
+        TwitterLogic.unfavorite(twitter, account)
+      }
+      if(account.updateProfile.isDefined) {
+        TwitterLogic.updateTwitterProfile(twitter, account)
+      }
     })
   }
 

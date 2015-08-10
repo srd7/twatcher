@@ -94,6 +94,11 @@
               @* / row 1 *@
               @* row 2 *@
               <div class="row">
+                <div class="col-sm-12">@Messages("setting.account.whendead")</div>
+              </div>
+              @* / row 2 *@
+              @* row 3 *@
+              <div class="row">
                 <div class="col-sm-4">
                   <label>
                     <input type="checkbox" form="update-account" name="goodbyeFlag" @checked(account.goodbyeFlag)>
@@ -113,8 +118,8 @@
                   </label>
                 </div>
               </div>
-              @* / row 2 *@
-              @* row 3 *@
+              @* / row 3 *@
+              @* row 4 *@
               <div class="row">
                 <div class="col-sm-10">
                   <textarea name="updateProfile" form="update-account" placeholder="@Messages("setting.account.updateprofile")">@account.updateProfile.getOrElse("")</textarea>
@@ -130,7 +135,7 @@
                   </form>
                 </div>
               </div>
-              @* / row 3 *@
+              @* / row 4 *@
             </div>
           </div>
         }

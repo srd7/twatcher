@@ -41,20 +41,7 @@ sealed trait TwitterApiRepositoryComponent {
      * Generate raw URL of request
      */
     private[this] def getFullUrl(req: WSRequest): String = {
-      val queryString = req.queryString
-      val query = queryString.keys.flatMap{ key =>
-        queryString(key) match {
-          case values if values.length > 1 => {
-            values.zipWithIndex.map { case (value, i) =>
-              s"${key}[${i}]=$value"
-            }
-          }
-          case value => {
-            List(s"${key}=${value(0)}")
-          }
-        }
-      }.mkString("&")
-      req.url + "?" + query
+      req.uri.toString
     }
 
     /**
@@ -347,7 +334,7 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
    * POST update profile
    */
   private[this] def updateProfile(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): Future[User] =
-    twitterApiRepository.post[User](PROFILE_UPDATE, token, params: _*)
+    twitterApiRepository.post[User](UPDATE_PROFILE, token, params: _*)
   // update name
   def updateName(name: String, token: RequestToken)(implicit ec: ExecutionContext): Future[User] =
     if(name.length <= 20) {

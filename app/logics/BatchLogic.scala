@@ -58,11 +58,11 @@ object BatchLogic {
    * Execute scripts asynchronously
    */
   private[this] def executeScript(scriptList: List[Script]): Unit = {
-    scriptList.foreach { scriptName =>
+    scriptList.foreach { script =>
       if (isWindows) {
-        s"cmd /c $scriptName".!
+        s"cmd /c ${script.path}".!
       } else {
-        s"./${scriptName}".!
+        s"./${script.path}".!
       }
     }
   }
@@ -73,7 +73,8 @@ object BatchLogic {
   private[this] def executeTwitterAction(accountList: List[Account]): Unit = {
     accountList.foreach( account => Future {
       // Execute action asynchronously
-      TwitterLogic.goodbye(twitter, account)
+      // Comming soon...
+      // TwitterLogic.goodbye(twitter, account)
     })
   }
 

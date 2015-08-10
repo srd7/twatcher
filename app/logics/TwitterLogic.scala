@@ -43,7 +43,9 @@ object TwitterLogic extends FutureUtils {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
     // Require to be active at least one account,
-    swapListFut(accountList.map(isActive(twitter, _))).map(_.exists(identity))
+    swapListFut(accountList.map(isActive(twitter, _))).map(isActiveList =>
+      isActiveList.isEmpty || isActiveList.exists(identity)
+    )
   }
 
   /**

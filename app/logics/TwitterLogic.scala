@@ -80,6 +80,23 @@ object TwitterLogic extends FutureUtils {
       }
     } yield ()
   }
+
+  /**
+   * Delete all favorites
+   */
+  def unfavorite(twitter: Twitter, account: Account) = {
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    val waitTime = 500L
+    val screenName = account.screenName
+    val tokenPair = account.token
+
+    twitter.getAllFavorite(screenName, tokenPair).map { tweetList =>
+      tweetList.foreach { tweet =>
+        twitter.unfavorite(tweet.id, tokenPair)
+        Thread.sleep(waitTime)
+      }
+    }
+  }
 }
 
 trait FutureUtils {

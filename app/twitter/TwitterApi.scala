@@ -301,7 +301,6 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
       f = (cursor: Long) => getFollowing(screenName, cursor, token)
     )
 
-
   /**
    * POST Tweet to Twitter
    */
@@ -313,6 +312,26 @@ sealed trait TwitterApiService { self: TwitterApiRepositoryComponent =>
    */
   def delete(tweetId: Long, token: RequestToken)(implicit ec: ExecutionContext): Future[Tweet] =
     twitterApiRepository.post[Tweet](STATUSES_DESTROY(tweetId), token)
+
+  /**
+   * POST update profile
+   */
+  private[this] def updateProfile(token: RequestToken, params: (String, String)*)(implicit ec: ExecutionContext): Future[User] =
+    twitterApiRepository.post[User](PROFILE_UPDATE, token, params: _*)
+  // update name
+  def updateName(name: String, token: RequestToken)(implicit ec: ExecutionContext): Future[User] =
+    if(name.length <= 20) {
+      updateProfile(token, "name" -> name)
+    } else {
+      Future.failed(new Exception("Name length maximum is 20"))
+    }
+  // update description
+  def updateDescription(description: String, token: RequestToken)(implicit ec: ExecutionContext): Future[User] =
+    if(description.length <= 160) {
+      updateProfile(token, "description" -> description)
+    } else {
+      Future.failed(new Exception("Description length maximum is 160"))
+    }
 
   /**
    * POST delete favorite

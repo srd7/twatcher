@@ -1,2 +1,2 @@
 cd bin
-twatcher.bat -Dtwatcher.mode="batch"
+twatcher.bat -Dtwatcher.mode=batch

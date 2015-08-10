@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 cd bin
-twatcher -Dtwatcher.mode="batch"
+twatcher -Dtwatcher.mode=batch

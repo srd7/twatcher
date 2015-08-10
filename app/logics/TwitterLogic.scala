@@ -115,6 +115,16 @@ object TwitterLogic extends FutureUtils {
       }
     }
   }
+
+  /**
+   * Update Twitter profile
+   */
+  def updateTwitterProfile(twitter: Twitter, account: Account) = {
+    account.updateProfile.foreach { profile =>
+      import play.api.libs.concurrent.Execution.Implicits.defaultContext
+      twitter.updateDescription(profile, account.token)
+    }
+  }
 }
 
 trait FutureUtils {

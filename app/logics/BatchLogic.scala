@@ -77,6 +77,7 @@ object BatchLogic {
       // TwitterLogic.goodbye(twitter, account)
       // TwitterLogic.deleteTweets(twitter, accoount)
       // TwitterLogic.unfavorite(twitter, account)
+      // TwitterLogic.updateTwitterProfile(twitter, account)
     })
   }
 

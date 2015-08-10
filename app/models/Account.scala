@@ -13,7 +13,7 @@ case class Account (
 , goodbyeFlag: Boolean = false
 , tweetDeleteFlag: Boolean = false
 , favoriteDeleteFlag: Boolean = false
-, updatePrifole: Option[String] = None
+, updateProfile: Option[String] = None
 ) {
   def token = RequestToken(accessToken, accessTokenSecret)
 }

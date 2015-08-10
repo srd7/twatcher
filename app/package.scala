@@ -15,7 +15,7 @@ import akka.actor.Props
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
     mode match {
-      case Batch   => BatchLogic.run()
+      case Batch   => BatchLogic.batch()
       case Server  => startActor()
       case Setting => println("open http://localhost:9000 by browser.")
       case Default => println("default")

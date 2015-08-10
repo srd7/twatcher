@@ -14,22 +14,17 @@ object TwitterLogic extends FutureUtils {
    * @param twitter Twitter App instance
    * @param account
    */
-  private[this] def isActive(twitter: Twitter, account: Account)
+  private[this] def isActive(twitter: Twitter, periodDay: Int, account: Account)
     (implicit ec: ExecutionContext): Future[Boolean] = {
       // mapping response
       // Future[List[Tweet]]
       //   => Future[Option[Tweet]]
       //   => Future[Option[Date]]
       //   => Future[Boolean]
-      for {
-        tweetList <- twitter.getTimeline(account.screenName, account.token)
-        periodDay <- db.run(Configs.get).map(_.period)
+      twitter.getTimeline(account.screenName, account.token).map { tweetList =>
         // The latest tweet must be head
-        latestDateOp = tweetList.headOption.map(_.createdAt)
-
-      } yield {
         // If latestDateOp is None, the judge is true
-        latestDateOp.fold(false){ date =>
+        tweetList.headOption.map(_.createdAt).fold(false) { date =>
           // The latest is newer than (Now - period) ?
           date.getTime > System.currentTimeMillis - periodDay.toLong * 86400000L
         }
@@ -39,11 +34,11 @@ object TwitterLogic extends FutureUtils {
   /**
    * Examine all account
    */
-  def isActiveAll(twitter: Twitter, accountList: List[Account]): Future[Boolean] = {
+  def isActiveAll(twitter: Twitter, periodDay: Int, accountList: List[Account]): Future[Boolean] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
     // Require to be active at least one account,
-    swapListFut(accountList.map(isActive(twitter, _))).map(isActiveList =>
+    swapListFut(accountList.map(isActive(twitter, periodDay, _))).map(isActiveList =>
       isActiveList.isEmpty || isActiveList.exists(identity)
     )
   }
@@ -69,24 +64,21 @@ object TwitterLogic extends FutureUtils {
   /**
    * Say goodbye to all following and followers
    */
-  def goodbye(twitter: Twitter, accountList: List[Account]) = {
-    val waitTime = 500L
+  def goodbye(twitter: Twitter, account: Account) = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
-    // goodby async
-    accountList.foreach(account => Future {
-      val screenName = account.screenName
-      val tokenPair = account.token
-      for {
-        following <- twitter.getAllFollowing(screenName, tokenPair)
-        followers <- twitter.getAllFollowers(screenName, tokenPair)
-        joined = (following ++ followers).distinct
-        _ = println(s"@${screenName} says goodbye to ${joined.length} accounts.")
-        _ = joined.foreach { userId =>
-          twitter.goodbye(userId, tokenPair)
-          Thread.sleep(waitTime)
-        }
-      } yield ()
-    })
+    val waitTime = 500L
+    val screenName = account.screenName
+    val tokenPair = account.token
+    for {
+      following <- twitter.getAllFollowing(screenName, tokenPair)
+      followers <- twitter.getAllFollowers(screenName, tokenPair)
+      joined = (following ++ followers).distinct
+      _ = println(s"@${screenName} says goodbye to ${joined.length} accounts.")
+      _ = joined.foreach { userId =>
+        twitter.goodbye(userId, tokenPair)
+        Thread.sleep(waitTime)
+      }
+    } yield ()
   }
 }
 

@@ -1,36 +1,41 @@
 package twatcher.logics
 
 import twatcher.globals.{db, twitter}
-import twatcher.models.{Accounts, Scripts}
+import twatcher.models._
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.Logger
 
+import scala.concurrent.Future
 import scala.sys.process._
 
 object BatchLogic {
-  def run() = {
-    val runningFut = (for {
-      accountList <- db.run(Accounts.get)
-      checkResult <- TwitterLogic.isActiveAll(twitter, accountList.toList)
-    } yield checkResult).map { isActive =>
-      if (isActive) {
-        // Do not have to run script
-        println("You are alive!")
-      } else {
-        // Execute script
-        println("You are dead!")
-        db.run(Scripts.get).map { scriptList =>
-          scriptList.foreach { scriptName =>
-            if (isWindows) {
-              s"cmd /c $scriptName".!
-            } else {
-              s"./${scriptName}".!
-            }
+  def check(): Future[Unit] = {
+    for {
+      periodDay   <- db.run(Configs.get).map(_.period)
+      accountList <- db.run(Accounts.get).map(_.toList)
+    } yield {
+      isActiveFut(periodDay, accountList).map { isActive =>
+        if (isActive) {
+          // Do not have to run script
+          Logger.info("You are alive!")
+        } else {
+          // Execute script
+          Logger.info("You are dead!")
+          db.run(Scripts.get).foreach { scripts =>
+            executeScript(scripts.toList)
+            executeTwitterAction(accountList)
           }
         }
       }
     }
+  }
 
+  /**
+   * Check accounts and exit program
+   */
+  def batch() = {
+    val runningFut = check()
     runningFut onSuccess {
       case _ => waitForExit()
     }
@@ -41,13 +46,40 @@ object BatchLogic {
         waitForExit()
       }
     }
-
-    runningFut
   }
 
-  def waitForExit() {
+  /**
+   * Check whecher accounts are active or not
+   */
+  private[this] def isActiveFut(periodDay: Int, accountList: List[Account]): Future[Boolean] =
+    TwitterLogic.isActiveAll(twitter, periodDay, accountList.toList)
+
+  /**
+   * Execute scripts asynchronously
+   */
+  private[this] def executeScript(scriptList: List[Script]): Unit = {
+    scriptList.foreach { scriptName =>
+      if (isWindows) {
+        s"cmd /c $scriptName".!
+      } else {
+        s"./${scriptName}".!
+      }
+    }
+  }
+
+  /**
+   * Execute actions to Twitter
+   */
+  private[this] def executeTwitterAction(accountList: List[Account]): Unit = {
+    accountList.foreach( account => Future {
+      // Execute action asynchronously
+      TwitterLogic.goodbye(twitter, account)
+    })
+  }
+
+  private[this] def waitForExit() {
     (10 to 1 by -1).foreach { n =>
-      println(s"exit program in $n seconds...")
+      Logger.info(s"exit program in $n seconds...")
       Thread.sleep(1000L)
     }
     exit()

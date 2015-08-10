@@ -41,3 +41,6 @@ mappings in Universal <++= (packageBin in Compile) map { jar =>
 }
 
 routesGenerator := InjectedRoutesGenerator
+
+// Do not generate API doc
+doc in Compile <<= target.map(_ / "none")

@@ -11,7 +11,8 @@ import play.api.libs.json.Json
 
 import scala.concurrent.Future
 
-class SettingController  extends Controller {
+// class SettingController extends Controller {
+object SettingController extends Controller {
 
   def updatePeriod = Action.async { implicit request =>
     SettingForm.periodForm.bindFromRequest.fold(

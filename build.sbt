@@ -18,7 +18,7 @@ lazy val root = (
     libraryDependencies ++= Seq(
       jdbc
     , ws
-    , evolutions
+    // , evolutions // necessary after Play 2.4
     , cache
     , "com.typesafe.slick" %% "slick"      % "3.0.0"
     , "com.typesafe.akka"  %% "akka-actor" % "2.3.11"
@@ -44,4 +44,5 @@ mappings in Universal <++= (packageBin in Compile) map { jar =>
 // Do not generate API doc
 doc in Compile <<= target.map(_ / "none")
 
-routesGenerator := InjectedRoutesGenerator
+// InjectedRoutesGenerator can be use afte Play 2.4
+// routesGenerator := InjectedRoutesGenerator

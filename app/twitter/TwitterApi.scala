@@ -5,7 +5,8 @@ import twatcher.twitter.TwitterReads._
 
 import play.api.libs.json.{JsValue, Reads}
 import play.api.libs.oauth.{ConsumerKey, OAuthCalculator, RequestToken}
-import play.api.libs.ws.{WS, WSRequest}
+// import play.api.libs.ws.{WS, WSRequest}    // at Play 2.4
+import play.api.libs.ws.{WS, WSRequestHolder} // at Play 2.3
 import play.api.Play.current
 
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -21,10 +22,12 @@ sealed trait TwitterApiRepositoryComponent {
     /**
      * Set URL and sign with calculator
      */
-    private[this] def buildRequest(url: String, token: RequestToken, param: (String, String)*): WSRequest = {
+    // private[this] def buildRequest(url: String, token: RequestToken, param: (String, String)*): WSRequest = {    // at Play 2.4
+    private[this] def buildRequest(url: String, token: RequestToken, param: (String, String)*): WSRequestHolder = { // at Play 2.3
       WS.url(url)
         .sign(OAuthCalculator(ck, token))
-        .withRequestTimeout(5.second.toMillis)
+        // .withRequestTimeout(5.second.toMillis)    // at Play 2.4
+        .withRequestTimeout(5.second.toMillis.toInt) // at Play 2.3
         .withQueryString(param: _*)
     }
 
@@ -40,8 +43,22 @@ sealed trait TwitterApiRepositoryComponent {
     /**
      * Generate raw URL of request
      */
-    private[this] def getFullUrl(req: WSRequest): String = {
-      req.uri.toString
+    // private[this] def getFullUrl(req: WSRequest): String = {    // at Play 2.4
+    private[this] def getFullUrl(req: WSRequestHolder): String = { // at Play 2.3
+      val queryString = req.queryString
+      val query = queryString.keys.flatMap{ key =>
+        queryString(key) match {
+          case values if values.length > 1 => {
+            values.zipWithIndex.map { case (value, i) =>
+              s"${key}[${i}]=$value"
+            }
+          }
+          case value => {
+            List(s"${key}=${value(0)}")
+          }
+        }
+      }.mkString("&")
+      req.url + "?" + query
     }
 
     /**

@@ -1,7 +1,8 @@
 @import twatcher.models.{Account, Script}
 @import twatcher.controllers.routes
 
-@(period: Int, accountList: List[Account], scriptList: List[Script])(implicit messages: Messages)
+@* @(period: Int, accountList: List[Account], scriptList: List[Script])(implicit messages: Messages) *@
+@(period: Int, accountList: List[Account], scriptList: List[Script])
 
 @title(value: Html) = {
   <div class="col-sm-2 col-xs-4 title">

@@ -9,7 +9,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 import scala.concurrent.Future
 
-class TwitterController extends Controller {
+// class TwitterController extends Controller {
+object TwitterController extends Controller {
   final val SES_TOKEN = "token"
   final val SES_SECRET = "secret"
 

@@ -6,14 +6,17 @@ import twatcher.logics.BatchLogic
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.routing.JavaScriptReverseRouter
-import play.api.i18n.{I18nSupport, MessagesApi}
+// import play.api.routing.JavaScriptReverseRouter
+// import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.concurrent.Future
 
-import javax.inject.Inject
+// import javax.inject.Inject
 
-class AppController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+// Comment-outed imports can not be used at Play 2.3...
+
+// class AppController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+object AppController extends Controller {
   def index(str: String) = Action {
     Ok(views.html.index())
   }
@@ -37,7 +40,8 @@ class AppController @Inject()(val messagesApi: MessagesApi) extends Controller w
 
 
   def jsRoutes = Action { implicit request =>
-    Ok(JavaScriptReverseRouter("router")(
+    // Ok(JavaScriptReverseRouter("router")(
+    Ok(play.api.Routes.javascriptRouter("router")(
       routes.javascript.SettingController.checkAccount
     )).as("text/javascript")
   }

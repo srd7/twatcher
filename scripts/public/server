@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
 cd bin
-twatcher -Dtwatcher.mode=server
+# twatcher -Dtwatcher.mode=server
+# Play 2.3 prod app needs "."
+twatcher . -Dtwatcher.mode=server

@@ -15,4 +15,5 @@
 
 ### v1.2.0
 - Add server mode: Check whether Twitter is active or not each 15 minutes.
+- Downgrade Playframework 2.4 -> 2.3: WS does not build queryString properly in Play 2.4...
 - Bug fix: Twatcher cannot run registered scripts.

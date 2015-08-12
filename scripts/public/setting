@@ -3,4 +3,17 @@
 cd bin
 # ./twatcher -Dtwatcher.mode=setting
 # Play 2.3 prod app needs "."
-./twatcher . -Dtwatcher.mode=setting
+./twatcher . -Dtwatcher.mode=setting &
+
+# Wait for 5 sec so that server can boot
+sleep 5s
+
+# Open localhost:9000 by browser
+# ref: http://stackoverflow.com/questions/3124556/clean-way-to-launch-the-web-browser-from-shell-script
+URL="http://localhost:9000"
+
+if which xdg-open > /dev/null; then
+  xdg-open $URL
+elif which gnome-open > /dev/null; then
+  gnome-open $URL
+fi

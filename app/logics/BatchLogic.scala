@@ -99,6 +99,8 @@ object BatchLogic {
   def exit() {
     if (isWindows) {
       "cmd /c exit.bat".!
+    } else {
+      "./exit".!
     }
   }
 

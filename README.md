@@ -4,17 +4,17 @@
 
 ## What is this?
 
-When your Twitter is not updated for certain period, Twatcher will execute your script.  
+When your Twitter is not updated for certain period, Twatcher will execute your script.
 
 ## Usage
 
 Set up to run this when your PC boots.
-**If you die suddenly and your family boot your PC, Twatcher format your HDD/SSD.**  
+**If you die suddenly and your family boot your PC, Twatcher format your HDD/SSD.**
 etc...
 
 ## Caution
 
-Whatever reason you do not update your Twitter, Twatcher will run the program.  
+Whatever reason you do not update your Twitter, Twatcher will run the program.
 If Twatcher kills your important files, we do not take any responsibility.
 
 ## How to use
@@ -33,7 +33,7 @@ If Twatcher kills your important files, we do not take any responsibility.
 
 ## FAQ
 
-- App does not start  
+- App does not start
   I know too long file path bothers to start up. Please put the App in shallower directory.
 
 ## Operation environment
@@ -43,6 +43,7 @@ If Twatcher kills your important files, we do not take any responsibility.
 ## Operation check
 
 - Windows 7 Home Premium 64bit(Java 1.8.0_51 64bit)
+- Linux Mint 17 Cinnamon 2.2.16 60bit(Java 1.8.0_51 64bit)
 
 ## Opinions
 

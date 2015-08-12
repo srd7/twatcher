@@ -2,7 +2,7 @@ name := "twatcher"
 
 val settings = Seq(
   name := "twatcher"
-, version := "1.2.0"
+, version := "1.2.1"
 , scalaVersion := "2.11.7"
 , scalacOptions ++= Seq(
     "-unchecked", "-deprecation", "-feature"

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-cd bin
-# ./twatcher -Dtwatcher.mode=setting
+# ./bin/twatcher -Dtwatcher.mode=setting -Dpidfile.path=bin/twatcher.pid &
 # Play 2.3 prod app needs "."
-./twatcher . -Dtwatcher.mode=setting &
+./bin/twatcher . -Dtwatcher.mode=setting -Dpidfile.path=bin/twatcher.pid &
 
 # Wait for 5 sec so that server can boot
 sleep 5s

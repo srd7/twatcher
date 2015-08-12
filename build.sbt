@@ -41,6 +41,13 @@ mappings in Universal <++= (packageBin in Compile) map { jar =>
   }
 }
 
+mappings in Universal <++= (packageBin in Compile) map { jar =>
+  val scriptsDir = new java.io.File("scripts/usr")
+  scriptsDir.listFiles.toSeq.map { f =>
+    f -> ("scripts/" + f.getName)
+  }
+}
+
 // Do not generate API doc
 doc in Compile <<= target.map(_ / "none")
 

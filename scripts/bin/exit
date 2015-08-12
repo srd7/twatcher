@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-FILE="../RUNNING_PID"
+FILE="bin/twatcher.pid"
 
 if [ -f "$FILE" ]; then
   PID=`cat $FILE`

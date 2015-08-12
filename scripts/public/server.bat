@@ -1,4 +1,3 @@
-cd bin
-rem twatcher.bat -Dtwatcher.mode=server
+rem bin\twatcher.bat -Dtwatcher.mode=server -Dpidfile.path=bin/twatcher.pid
 rem Play 2.3 prod app needs "."
-twatcher.bat . -Dtwatcher.mode=server
+bin\twatcher.bat . -Dtwatcher.mode=server -Dpidfile.path=bin/twatcher.pid

@@ -1,9 +1,10 @@
 rem kill app on windows
 @echo off
-if exist RUNNING_PID (
+set FILE="bin\twatcher.pid"
+if exist %FILE% (
   setlocal EnableDelayedExpansion
-  set /P PID=<RUNNING_PID
+  set /P PID=<%FILE%
   taskkill /F /PID !PID!
-  del RUNNING_PID
+  del %FILE%
   endlocal
 )

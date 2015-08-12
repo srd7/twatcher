@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cd bin
-# ./twatcher -Dtwatcher.mode=batch
+# ./bin/twatcher -Dtwatcher.mode=batch -Dpidfile.path=bin/twatcher.pid
 # Play 2.3 prod app needs "."
-./twatcher . -Dtwatcher.mode=batch
+./bin/twatcher . -Dtwatcher.mode=batch -Dpidfile.path=bin/twatcher.pid

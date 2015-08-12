@@ -1,2 +1,1 @@
-cd bin
-exit.bat
+bin\exit.bat

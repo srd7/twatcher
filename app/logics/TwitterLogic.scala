@@ -2,7 +2,7 @@ package twatcher.logics
 
 import twatcher.globals.db
 import twatcher.models.{Account, Accounts, Configs}
-import twatcher.twitter.Twitter
+import twatcher.twitter.{Twitter, User}
 
 import play.api.libs.oauth.RequestToken
 
@@ -71,7 +71,7 @@ object TwitterLogic extends FutureUtils {
   /**
    * Say goodbye to all following and followers
    */
-  def goodbye(twitter: Twitter, account: Account) = {
+  def goodbye(twitter: Twitter, account: Account): Future[Unit] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     val waitTime = 500L
     val screenName = account.screenName
@@ -91,7 +91,7 @@ object TwitterLogic extends FutureUtils {
   /**
    * Delete all tweets available
    */
-  def deleteTweets(twitter: Twitter, account: Account) = {
+  def deleteTweets(twitter: Twitter, account: Account): Future[Unit] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     val waitTime = 500L
     val screenName = account.screenName
@@ -108,7 +108,7 @@ object TwitterLogic extends FutureUtils {
   /**
    * Delete all favorites
    */
-  def unfavorite(twitter: Twitter, account: Account) = {
+  def unfavorite(twitter: Twitter, account: Account): Future[Unit] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     val waitTime = 500L
     val screenName = account.screenName
@@ -125,10 +125,10 @@ object TwitterLogic extends FutureUtils {
   /**
    * Update Twitter profile
    */
-  def updateTwitterProfile(twitter: Twitter, account: Account) = {
-    account.updateProfile.foreach { profile =>
+  def updateTwitterProfile(twitter: Twitter, account: Account): Future[Unit] = {
+    account.updateProfile.fold(Future.successful(())) { profile =>
       import play.api.libs.concurrent.Execution.Implicits.defaultContext
-      twitter.updateDescription(profile, account.token)
+      twitter.updateDescription(profile, account.token).map(_ => ())
     }
   }
 }

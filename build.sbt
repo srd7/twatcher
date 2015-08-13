@@ -21,7 +21,7 @@ lazy val root = (
     // , evolutions // necessary after Play 2.4
     , cache
     , "com.typesafe.slick" %% "slick"      % "3.0.0"
-    , "com.typesafe.akka"  %% "akka-actor" % "2.3.11"
+    , "com.typesafe.akka"  %% "akka-actor" % "2.3.12"
     )
   )
 )

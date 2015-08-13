@@ -22,3 +22,7 @@
 - Modify file constructure.  
   `data/` directory is DB and log files, `scripts` directory is user scripts
 - Fix Linux shellscript.
+
+### v1.2.2
+- Wait until script/twitter ends
+- Do not run script repeatedly on server mode.

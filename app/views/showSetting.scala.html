@@ -105,19 +105,19 @@
               <div class="row">
                 <div class="col-sm-4">
                   <label>
-                    <input type="checkbox" form="update-account" name="goodbyeFlag" @checked(account.goodbyeFlag)>
+                    <input type="checkbox" form="update-account-@account.userId" name="goodbyeFlag" @checked(account.goodbyeFlag)>
                     @Messages("setting.account.goodbyeflag")
                   </label>
                 </div>
                 <div class="col-sm-4">
                   <label>
-                    <input type="checkbox" form="update-account" name="tweetDeleteFlag" @checked(account.tweetDeleteFlag)>
+                    <input type="checkbox" form="update-account-@account.userId" name="tweetDeleteFlag" @checked(account.tweetDeleteFlag)>
                     @Messages("setting.account.tweetdeleteflag")
                   </label>
                 </div>
                 <div class="col-sm-4">
                   <label>
-                    <input type="checkbox" form="update-account" name="favoriteDeleteFlag" @checked(account.favoriteDeleteFlag)>
+                    <input type="checkbox" form="update-account-@account.userId" name="favoriteDeleteFlag" @checked(account.favoriteDeleteFlag)>
                     @Messages("setting.account.favoritedeleteflag")
                   </label>
                 </div>
@@ -126,10 +126,10 @@
               @* row 4 *@
               <div class="row">
                 <div class="col-sm-10">
-                  <textarea name="updateProfile" form="update-account" placeholder="@Messages("setting.account.updateprofile")">@account.updateProfile.getOrElse("")</textarea>
+                  <textarea name="updateProfile" form="update-account-@account.userId" placeholder="@Messages("setting.account.updateprofile")">@account.updateProfile.getOrElse("")</textarea>
                 </div>
                 <div class="col-sm-2">
-                  <form action="@routes.SettingController.updateAccount" method="POST" id="update-account">
+                  <form action="@routes.SettingController.updateAccount" method="POST" id="update-account-@account.userId">
                     <input type="hidden" name="userId" value="@account.userId">
                     <input type="submit" value="@Messages("button.update")">
                   </form>

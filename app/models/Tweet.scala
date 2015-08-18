@@ -1,6 +1,7 @@
 package twatcher.models
 
 import slick.driver.H2Driver.api._
+import slick.jdbc.GetResult
 
 case class Tweet (
   userId : Long
@@ -14,7 +15,11 @@ class Tweets(tag: Tag) extends Table[Tweet](tag, "TWEET") {
 }
 
 object Tweets extends TableQuery(new Tweets(_)) {
+
   def insertAll(tweets: Seq[Tweet]) = DBIO.seq(this ++= tweets)
   def get(userId: Long) = this.filter(_.userId === userId).result
+  def count: DBIO[Seq[(Long, Int)]] = {
+    sql"SELECT USER_ID, COUNT(1) FROM TWEET GROUP BY (USER_ID)".as[(Long, Int)]
+  }
   def latest(userId: Long) = this.filter(_.userId === userId).sortBy(_.tweetId.desc).result.headOption
 }

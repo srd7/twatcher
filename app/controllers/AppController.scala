@@ -1,6 +1,6 @@
 package twatcher.controllers
 
-import twatcher.models.{Accounts, Configs, Scripts}
+import twatcher.models.{Accounts, Configs, Scripts, Tweets}
 import twatcher.globals.db
 import twatcher.logics.BatchLogic
 
@@ -25,9 +25,10 @@ object AppController extends Controller {
     for {
       period      <- db.run(Configs.get).map(_.period)
       accountList <- db.run(Accounts.get).map(_.toList)
+      counterMap  <- db.run(Tweets.count).map(_.toMap)
       scriptList  <- db.run(Scripts.get).map(_.toList)
     } yield {
-      Ok(views.html.showSetting(period, accountList, scriptList))
+      Ok(views.html.showSetting(period, accountList, counterMap, scriptList))
     }
   }
 

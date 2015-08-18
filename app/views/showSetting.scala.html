@@ -2,7 +2,7 @@
 @import twatcher.controllers.routes
 
 @* @(period: Int, accountList: List[Account], scriptList: List[Script])(implicit messages: Messages) *@
-@(period: Int, accountList: List[Account], scriptList: List[Script])
+@(period: Int, accountList: List[Account], counter: Map[Long, Int], scriptList: List[Script])
 
 @title(value: Html) = {
   <div class="col-sm-2 col-xs-4 title">
@@ -90,6 +90,9 @@
                   <span class="auth-check">@Messages("setting.account.authentication.checking")</span>
                   <span class="auth-ok">@Messages("setting.account.authentication.ok")</span>
                   <span class="auth-failed">@Messages("setting.account.authentication.failed")</span>
+                </div>
+                <div class="col-md-4 col-sm-5">
+                  @Messages("setting.account.store.tweet.length", counter.get(account.userId).getOrElse(0))
                 </div>
               </div>
               @* / row 1 *@

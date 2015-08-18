@@ -33,6 +33,8 @@ setting.account.authentication.checking=アプリ連携確認中...
 setting.account.authentication.ok=アプリ連携成功
 setting.account.authentication.failed=アプリ連携失敗
 
+setting.account.store.tweet.length=ツイート情報を {0} 件保存済
+
 setting.zip.title=全ツイートのzip
 setting.zip.description=zipを登録しておけば、全ツイートを削除できます。
 
@@ -41,3 +43,4 @@ app.terminated=アプリが終了されました。ウィンドウを閉じて�
 button.add=追加
 button.update=更新
 button.delete=削除
+button.upload=アップロード

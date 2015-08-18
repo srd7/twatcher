@@ -20,8 +20,10 @@ lazy val root = (
     , ws
     // , evolutions // necessary after Play 2.4
     , cache
-    , "com.typesafe.slick" %% "slick"      % "3.0.0"
-    , "com.typesafe.akka"  %% "akka-actor" % "2.3.12"
+    , "com.typesafe.slick"   %% "slick"       % "3.0.0"
+    , "com.typesafe.akka"    %% "akka-actor"  % "2.3.12"
+    , "org.scalaz"           %% "scalaz-core" % "7.1.3"
+    , "com.github.tototoshi" %% "scala-csv"   % "1.2.2"
     )
   )
 )

@@ -34,8 +34,12 @@ setting.account.authentication.checking=Checking Authentication...
 setting.account.authentication.ok=Authenticated
 setting.account.authentication.failed=Authenticate Failed
 
+setting.zip.title=Zip of all tweets
+setting.zip.description=Once upload tweets zip, delete all tweets task deletes them
+
 app.terminated=App has terminated. Please close this window.
 
 button.add=Add
 button.update=Update
 button.delete=Delete
+button.upload=Upload

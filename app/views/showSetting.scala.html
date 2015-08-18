@@ -145,5 +145,19 @@
         </form>
       }
     </div>
+
+    <div class="row setting-row">
+      @title{
+        @Messages("setting.zip.title")
+      }
+      @body{
+        @Messages("setting.zip.description")
+      }{
+        <form action="@routes.SettingController.insertTweetZip" method="POST" enctype="multipart/form-data">
+          <input type="file" name="zip">
+          <input type="submit" value="@Messages("button.upload")">
+        </form>
+      }
+    </div>
   </div>
 }

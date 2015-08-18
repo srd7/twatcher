@@ -14,6 +14,7 @@ class Tweets(tag: Tag) extends Table[Tweet](tag, "TWEET") {
 }
 
 object Tweets extends TableQuery(new Tweets(_)) {
+  def insertAll(tweets: Seq[Tweet]) = DBIO.seq(this ++= tweets)
   def get(userId: Long) = this.filter(_.userId === userId).result
   def latest(userId: Long) = this.filter(_.userId === userId).sortBy(_.tweetId.desc).result.headOption
 }

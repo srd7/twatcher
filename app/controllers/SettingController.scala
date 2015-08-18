@@ -3,7 +3,7 @@ package twatcher.controllers
 import twatcher.controllers.forms.SettingForm
 import twatcher.globals.{db, twitter}
 import twatcher.models.{Accounts, Configs, Scripts}
-import twatcher.logics.TwitterLogic
+import twatcher.logics.{FileLogic, TwitterLogic}
 
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -111,6 +111,19 @@ object SettingController extends Controller {
           ))
         }
       )
+    }
+  }
+
+  /**
+   * Upload zip file, parse it, and insert tweet ids into DB
+   */
+  def insertTweetZip = Action.async(parse.multipartFormData) { implicit request =>
+    request.body.file("zip").fold[Future[Result]](Future.successful(BadRequest)) { zip =>
+      FileLogic.insertTweetZip(zip.ref.file).map { _ =>
+        Redirect(routes.AppController.showSetting)
+      } recover {
+        case e: Exception => InternalServerError("db error")
+      }
     }
   }
 }

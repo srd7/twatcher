@@ -10,6 +10,7 @@ POST    /delete/script              twatcher.controllers.SettingController.delet
 POST    /update/account             twatcher.controllers.SettingController.updateAccount
 POST    /delete/account             twatcher.controllers.SettingController.deleteAccount
 POST    /check/account/:userId      twatcher.controllers.SettingController.checkAccount(userId: Long)
+POST    /insert/zip                 twatcher.controllers.SettingController.insertTweetZip
 
 GET     /twitter/login              twatcher.controllers.TwitterController.login
 GET     /twitter/callback           twatcher.controllers.TwitterController.loginDone

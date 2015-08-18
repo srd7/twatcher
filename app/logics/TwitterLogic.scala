@@ -100,12 +100,11 @@ object TwitterLogic {
   def deleteTweets(twitter: Twitter, account: Account): Future[Unit] = {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
     val waitTime = 500L
-    val screenName = account.screenName
     val tokenPair = account.token
 
-    twitter.getAllTweets(screenName, tokenPair).map { tweetList =>
+    db.run(Tweets.get(account.userId)).map { tweetList =>
       tweetList.foreach { tweet =>
-        twitter.delete(tweet.id, tokenPair)
+        twitter.delete(tweet.tweetId, tokenPair)
         Thread.sleep(waitTime)
       }
     }

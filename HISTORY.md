@@ -30,3 +30,6 @@
 ### v1.2.3
 - Enable to upload zip file
 - Delete tweets from DB
+
+### v1.2.4
+- Bug fix: cannot update account setting when there are more than 2 accounts.

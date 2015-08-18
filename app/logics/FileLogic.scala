@@ -48,7 +48,8 @@ object FileLogic {
    * Read zip and insert tweets into DB
    */
   def insertTweetZip(zip: File): Future[Unit] =  {
-    val tweets: Throwable \/ List[Tweet] = for {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    val tweets: Throwable \/ (Long, List[Tweet]) = for {
       userDetailBytes <- unzip(zip, "user_details.js")
       userDetailStr   <- userDetailBytes.headOption.map(ba => new String(ba, "UTF-8")) \/>
         new InsertZipTweetException("user_details.js load error")
@@ -59,9 +60,15 @@ object FileLogic {
       csv             =  CSVReader.open(tweetsReader)
       _               =  csv.readNext() // First line is header not data
       tweets          =  csv.all().map(line => Tweet(userId, line.head.toLong))
-    } yield tweets
+    } yield (userId, tweets)
 
-    tweets.fold(Future.failed(_), tweets => db.run(Tweets.insertAll(tweets)))
+    tweets.fold(Future.failed(_), { case (userId, tweets) =>
+      for {
+        already <- db.run(Tweets.get(userId)).map(_.toList)
+        target  =  tweets.diff(already)
+        _       <- db.run(Tweets.insertAll(target))
+      } yield ()
+    })
   }
 
   /**

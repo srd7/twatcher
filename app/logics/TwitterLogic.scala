@@ -1,14 +1,17 @@
 package twatcher.logics
 
 import twatcher.globals.db
-import twatcher.models.{Account, Accounts, Configs}
+import twatcher.models.{Account, Accounts, Configs, Tweet => DBTweet, Tweets}
 import twatcher.twitter.{Twitter, User}
 
 import play.api.libs.oauth.RequestToken
+import play.api.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object TwitterLogic extends FutureUtils {
+import scalaz.Scalaz._
+
+object TwitterLogic {
   /**
    * Examine that an account is updated or not
    * @param twitter Twitter App instance
@@ -25,10 +28,13 @@ object TwitterLogic extends FutureUtils {
       twitter.getTimeline(account.screenName, count, account.token).map { tweetList =>
         // The latest tweet must be head
         // If latestDateOp is None, the judge is true
-        tweetList.headOption.map(_.createdAt).fold(false) { date =>
+        val result = tweetList.headOption.map(_.createdAt).fold(false) { date =>
           // The latest is newer than (Now - period) ?
           date.getTime > System.currentTimeMillis - periodDay.toLong * 86400000L
         }
+        val resultStr = if (result) "active" else "not active"
+        Logger.info(s"[TwitterLogic] @${account.screenName} is ${resultStr}")
+        result
       }
     }
 
@@ -39,7 +45,7 @@ object TwitterLogic extends FutureUtils {
     import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
     // Require to be active at least one account,
-    swapListFut(accountList.map(isActive(twitter, periodDay, _))).map(isActiveList =>
+    accountList.traverseU(isActive(twitter, periodDay, _)).map(isActiveList =>
       isActiveList.isEmpty || isActiveList.exists(identity)
     )
   }
@@ -80,7 +86,7 @@ object TwitterLogic extends FutureUtils {
       following <- twitter.getAllFollowing(screenName, tokenPair)
       followers <- twitter.getAllFollowers(screenName, tokenPair)
       joined = (following ++ followers).distinct
-      _ = println(s"@${screenName} says goodbye to ${joined.length} accounts.")
+      _ = Logger.info(s"@${screenName} says goodbye to ${joined.length} accounts.")
       _ = joined.foreach { userId =>
         twitter.goodbye(userId, tokenPair)
         Thread.sleep(waitTime)
@@ -131,22 +137,26 @@ object TwitterLogic extends FutureUtils {
       twitter.updateDescription(profile, account.token).map(_ => ())
     }
   }
-}
 
-trait FutureUtils {
   /**
-   * Swap List[Future[T]] => Future[List[T]]
+   * Load tweets from Twitter and insert them to DB
    */
-  def swapListFut[T](base: List[Future[T]])(implicit ec: ExecutionContext): Future[List[T]] = {
-    def loop(list: List[Future[T]], result: Future[List[T]]): Future[List[T]] = list match {
-      case head :: tail => {
-        val newResult = head.flatMap { t =>
-          result.map(t :: _)
-        }
-        loop(tail, newResult)
-      }
-      case Nil => result.map(_.reverse)
-    }
-    loop(base, Future.successful(Nil))
+  private[this] def insertTweets(twitter: Twitter, account: Account)(implicit ec: ExecutionContext): Future[Unit] = {
+    val userId = account.userId
+    val screenName = account.screenName
+    Logger.info(s"[TwitterLogic] @${screenName} start to insert tweets to DB")
+    for {
+      tweetList     <- twitter.getAllTweets(screenName, account.token)
+      latestTweet   <- db.run(Tweets.latest(userId))
+      latestTweetId =  latestTweet.fold(0L)(_.tweetId)
+      dbTweetList   =  tweetList.withFilter(_.id > latestTweetId).map(apiTweet => DBTweet(userId, apiTweet.id))
+      _             <- db.run(Tweets.insertAll(dbTweetList))
+      _             =  Logger.info(s"[TwitterLogic] Inserted ${dbTweetList.length} tweet(s) to DB for @${screenName}")
+    } yield ()
+  }
+
+  def insertTweetsAll(twitter: Twitter, accountList: List[Account]): Future[Unit] ={
+    import play.api.libs.concurrent.Execution.Implicits.defaultContext
+    accountList.traverseU_(insertTweets(twitter, _))
   }
 }

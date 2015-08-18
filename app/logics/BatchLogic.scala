@@ -24,6 +24,7 @@ object BatchLogic {
     val resultFut = for {
       periodDay   <- db.run(Configs.get).map(_.period)
       accountList <- db.run(Accounts.get).map(_.toList)
+      _           <- TwitterLogic.insertTweetsAll(twitter, accountList)
       result      <- isActiveFut(periodDay, accountList)
       runningSt   <- batchActor ? IsRunning()
     } yield (result, runningSt, accountList)
@@ -72,7 +73,7 @@ object BatchLogic {
    * Check whecher accounts are active or not
    */
   private[this] def isActiveFut(periodDay: Int, accountList: List[Account]): Future[Boolean] =
-    TwitterLogic.isActiveAll(twitter, periodDay, accountList.toList)
+    TwitterLogic.isActiveAll(twitter, periodDay, accountList)
 
   def exit() {
     (10 to 1 by -1).foreach { n =>

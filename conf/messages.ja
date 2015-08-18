@@ -23,15 +23,18 @@ setting.script.description=ツイッターの更新がなかった時に実行�
 
 setting.account.title=ツイッターアカウント
 setting.account.description=アクティブかどうかを確認するツイッターアカウント
-
-setting.account.authentication.checking=アプリ連携確認中...
-setting.account.authentication.ok=アプリ連携成功
-setting.account.authentication.failed=アプリ連携失敗
 setting.account.whendead=スクリプト実行と同時に行うツイッターアクション
 setting.account.goodbyeflag=フォロワーを解除する
 setting.account.tweetdeleteflag=ツイートを削除する
 setting.account.favoritedeleteflag=ふぁぼを削除する
 setting.account.updateprofile=プロフィールを更新する
+
+setting.account.authentication.checking=アプリ連携確認中...
+setting.account.authentication.ok=アプリ連携成功
+setting.account.authentication.failed=アプリ連携失敗
+
+setting.zip.title=全ツイートのzip
+setting.zip.description=zipを登録しておけば、全ツイートを削除できます。
 
 app.terminated=アプリが終了されました。ウィンドウを閉じてください。
 

@@ -60,9 +60,8 @@ object FileLogic {
       _               =  csv.readNext() // First line is header not data
       tweets          =  csv.all().map(line => Tweet(userId, line.head.toLong))
     } yield tweets
-    // } yield null
 
-    tweets.fold(e => { println(e); Future.failed(e)}, tweets => db.run(Tweets.insertAll(tweets)))
+    tweets.fold(Future.failed(_), tweets => db.run(Tweets.insertAll(tweets)))
   }
 
   /**

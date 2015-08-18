@@ -26,3 +26,7 @@
 ### v1.2.2
 - Wait until script/twitter ends
 - Do not run script repeatedly on server mode.
+
+### v1.2.3
+- Enable to upload zip file
+- Delete tweets from DB
